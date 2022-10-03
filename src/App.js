@@ -5,6 +5,8 @@ import NewReportForm from './components/NewReportForm';
 import { getMarkers } from './services/report.service';
 
 function App() {
+  const [appView, setAppView] = useState('own');
+
   const [formModalOpen, setFormModalOpen] = useState(false);
 
   const [map, setMap] = useState(null);
@@ -17,29 +19,77 @@ function App() {
     });
   }, []);
 
+  const MapView = () => {
+    return (
+      <MapContainer
+        center={[64.07391245239761, 24.53362472782081]}
+        zoom={20}
+        scrollWheelZoom={false}
+        // ref={setMap}
+      >
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        <span className="crosshair">+</span>
+
+        {centerLocations.map((location) => (
+          <Marker key={location[0]} position={location}>
+            <Popup>
+              New marker at <br />
+              {location[0]}
+              <br />
+              {location[1]}
+            </Popup>
+          </Marker>
+        ))}
+      </MapContainer>
+    );
+  };
+
+  const FormView = () => {
+    return (
+      <>
+        <Button size="md" onClick={() => setFormModalOpen(true)}>
+          Uusi
+        </Button>
+        <Modal
+          centered
+          size="lg"
+          opened={formModalOpen}
+          onClose={() => setFormModalOpen(false)}
+          title="Lisää ilmoitus"
+        >
+          <NewReportForm />
+        </Modal>
+      </>
+    );
+  };
+
+  const SideBar = () => {
+    return (
+      <Navbar width={{ base: 100 }} p="xs">
+        <Button onClick={() => setAppView('own')}>Omat</Button>
+        <Button onClick={() => setAppView('map')}>Kartta</Button>
+        <Button
+          onClick={() => {
+            const center = map.getCenter();
+
+            setCenterLocations(
+              centerLocations.concat([[center.lat, center.lng]])
+            );
+          }}
+        >
+          Center
+        </Button>
+      </Navbar>
+    );
+  };
   return (
     <div>
       <AppShell
         padding="10"
-        navbar={
-          <Navbar width={{ base: 100 }} p="xs">
-            <Button size="md" onClick={() => setFormModalOpen(true)}>
-              Uusi
-            </Button>
-            <Button
-              size="md"
-              onClick={() => {
-                const center = map.getCenter();
-
-                setCenterLocations(
-                  centerLocations.concat([[center.lat, center.lng]])
-                );
-              }}
-            >
-              Center
-            </Button>
-          </Navbar>
-        }
+        navbar={<SideBar />}
         header={
           <Header height={80} p="xs">
             <h1>Kaupunki</h1>
@@ -47,37 +97,9 @@ function App() {
         }
       >
         {/* Appshell content */}
-        <MapContainer
-          center={[64.07391245239761, 24.53362472782081]}
-          zoom={20}
-          scrollWheelZoom={false}
-          ref={setMap}
-        >
-          <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
-          <span className="crosshair">+</span>
-
-          {centerLocations.map((location) => (
-            <Marker key={location[0]} position={location}>
-              <Popup>
-                New marker at <br />
-                {location[0]}
-                <br />
-                {location[1]}
-              </Popup>
-            </Marker>
-          ))}
-        </MapContainer>
+        {appView === 'own' && <FormView />}
+        {appView === 'map' && <MapView />}
       </AppShell>
-      <Modal
-        opened={formModalOpen}
-        onClose={() => setFormModalOpen(false)}
-        title="Lisää ilmoitus"
-      >
-        <NewReportForm />
-      </Modal>
     </div>
   );
 }
