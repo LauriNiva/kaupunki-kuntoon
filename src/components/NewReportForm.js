@@ -1,13 +1,24 @@
 import { useForm } from '@mantine/form';
-import { Button, FileInput, Group, Modal, Textarea, TextInput } from '@mantine/core';
+import {
+  Button,
+  FileInput,
+  Group,
+  Image,
+  Modal,
+  Textarea,
+  TextInput,
+} from '@mantine/core';
 import { useState } from 'react';
 import { MapContainer, Marker, TileLayer } from 'react-leaflet';
+import { IconPhoto } from '@tabler/icons';
+import { addReport } from '../services/report.service';
 
 function NewReportForm() {
   const [mapModalOpen, setMapModalOpen] = useState(false);
   const [chosenLocation, setChosenLocation] = useState(null);
   const [formMap, setFormMap] = useState();
   const [smallFormMap, setSmallFormMap] = useState();
+  const [imagePreview, setImagePreview] = useState(null);
 
   const form = useForm({
     initialValues: {
@@ -26,24 +37,41 @@ function NewReportForm() {
   return (
     <div>
       <form
-        onSubmit={form.onSubmit((values) =>
-          console.log({ ...values, chosenLocation })
-        )}
+        onSubmit={form.onSubmit((values) => {
+          console.log({ ...values, chosenLocation });
+          const newReport = {
+            'lat': chosenLocation[0] ,
+            'long': chosenLocation[1] ,
+            'description' : values.kuvaus
+          }
+          console.log(newReport)
+          addReport(newReport);
+        })}
       >
         <Textarea
+          required
           label="Kuvaus"
           placeholder="Kuvaa ongelma yms"
           minRows={3}
           maxRows={6}
           {...form.getInputProps('kuvaus')}
         />
-        <FileInput
-          label="Kuva"
-          placeholder="Lisää kuva"
-          {...form.getInputProps('kuva')}
-        />
+        <Group mt={'sm'} noWrap align={'start'}>
+          <FileInput
+            {...form.getInputProps('kuva')}
+            onChange={setImagePreview}
+            value={imagePreview}
+            accept="image/png,image/jpeg"
+            label="Kuva"
+            placeholder="Lisää kuva"
+            icon={<IconPhoto size={26} />}
+          />
+          {imagePreview && (
+            <Image m={'md'} src={URL.createObjectURL(imagePreview)} />
+          )}
+        </Group>
 
-        <div>
+        <Group mt={'sm'}>
           <MapContainer
             center={[64.07391245239761, 24.53362472782081]}
             zoom={20}
@@ -63,8 +91,8 @@ function NewReportForm() {
               {!chosenLocation ? 'Lisää sijainti' : 'Muuta sijaintia'}
             </Button>
           </MapContainer>
-        </div>
-        <Group position="right">
+        </Group>
+        <Group mt={'md'} position="right">
           <Button type="submit">Lisää</Button>
         </Group>
       </form>

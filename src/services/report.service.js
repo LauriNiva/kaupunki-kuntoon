@@ -7,3 +7,12 @@ export const getMarkers = async () => {
 
   if (data) return data;
 };
+
+
+export const addReport = async (newReport) => {
+  const { data, error } = await supabase.from('reports').insert([newReport])
+
+  if (error) console.log(error);
+
+
+}

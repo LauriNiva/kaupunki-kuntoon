@@ -11,11 +11,14 @@ function App() {
 
   const [map, setMap] = useState(null);
 
+  const [locations, setLocations] = useState([]);
   const [centerLocations, setCenterLocations] = useState([]);
+
+  console.log(locations);
 
   useEffect(() => {
     getMarkers().then((data) => {
-      setCenterLocations(data.map((report) => [report.lat, report.long]));
+      setLocations(data);
     });
   }, []);
 
@@ -33,13 +36,10 @@ function App() {
         />
         <span className="crosshair">+</span>
 
-        {centerLocations.map((location) => (
-          <Marker key={location[0]} position={location}>
+        {locations.map((location) => (
+          <Marker key={location.id} position={[location.lat, location.long]}>
             <Popup>
-              New marker at <br />
-              {location[0]}
-              <br />
-              {location[1]}
+              {location.description}
             </Popup>
           </Marker>
         ))}
