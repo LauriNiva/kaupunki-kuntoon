@@ -1,6 +1,7 @@
-import { AppShell, Button, Header, Modal, Navbar } from '@mantine/core';
+import { AppShell, Button, Header, Image, Modal, Navbar } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import Mapview from './components/Mapview';
 import NewReportForm from './components/NewReportForm';
 import { getMarkers } from './services/report.service';
 
@@ -22,30 +23,43 @@ function App() {
     });
   }, []);
 
-  const MapView = () => {
-    return (
-      <MapContainer
-        center={[64.07391245239761, 24.53362472782081]}
-        zoom={20}
-        scrollWheelZoom={false}
-        // ref={setMap}
-      >
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        <span className="crosshair">+</span>
+  // const MapView = () => {
+  //   return (
+  //     <MapContainer
+  //       center={[64.07391245239761, 24.53362472782081]}
+  //       zoom={20}
+  //       scrollWheelZoom={false}
+  //       // ref={setMap}
+  //     >
+  //       <TileLayer
+  //         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  //         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+  //       />
+  //       <span className="crosshair">+</span>
 
-        {locations.map((location) => (
-          <Marker key={location.id} position={[location.lat, location.long]}>
-            <Popup>
-              {location.description}
-            </Popup>
-          </Marker>
-        ))}
-      </MapContainer>
-    );
-  };
+  //       {locations.map((location) => (
+  //         <Marker  key={location.id} position={[location.lat, location.long]}>
+  //           <Popup autoPanPadding className="report-popup">
+  //             {location.description}
+  //             {!location.images ? (
+  //               <Image
+  //                 src={
+  //                   'https://yeopeoovpnhcjzmqilyz.supabase.co/storage/v1/object/public/kaupunki-images/default.jpg'
+  //                 }
+  //               />
+  //             ) : (
+  //               <Image
+  //                 src={
+  //                   'https://yeopeoovpnhcjzmqilyz.supabase.co/storage/v1/object/public/kaupunki-images/default.jpg'
+  //                 }
+  //               />
+  //             )}
+  //           </Popup>
+  //         </Marker>
+  //       ))}
+  //     </MapContainer>
+  //   );
+  // };
 
   const FormView = () => {
     return (
@@ -98,7 +112,7 @@ function App() {
       >
         {/* Appshell content */}
         {appView === 'own' && <FormView />}
-        {appView === 'map' && <MapView />}
+        {appView === 'map' && <Mapview />}
       </AppShell>
     </div>
   );
