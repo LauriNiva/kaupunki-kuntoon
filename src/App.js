@@ -1,65 +1,12 @@
-import { AppShell, Button, Header, Image, Modal, Navbar } from '@mantine/core';
-import { useEffect, useState } from 'react';
-import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import { AppShell, Button, Header, Modal, Navbar } from '@mantine/core';
+import { useState } from 'react';
 import Mapview from './components/Mapview';
 import NewReportForm from './components/NewReportForm';
-import { getMarkers } from './services/report.service';
 
 function App() {
   const [appView, setAppView] = useState('own');
 
   const [formModalOpen, setFormModalOpen] = useState(false);
-
-  const [map, setMap] = useState(null);
-
-  const [locations, setLocations] = useState([]);
-  const [centerLocations, setCenterLocations] = useState([]);
-
-  console.log(locations);
-
-  useEffect(() => {
-    getMarkers().then((data) => {
-      setLocations(data);
-    });
-  }, []);
-
-  // const MapView = () => {
-  //   return (
-  //     <MapContainer
-  //       center={[64.07391245239761, 24.53362472782081]}
-  //       zoom={20}
-  //       scrollWheelZoom={false}
-  //       // ref={setMap}
-  //     >
-  //       <TileLayer
-  //         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-  //         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-  //       />
-  //       <span className="crosshair">+</span>
-
-  //       {locations.map((location) => (
-  //         <Marker  key={location.id} position={[location.lat, location.long]}>
-  //           <Popup autoPanPadding className="report-popup">
-  //             {location.description}
-  //             {!location.images ? (
-  //               <Image
-  //                 src={
-  //                   'https://yeopeoovpnhcjzmqilyz.supabase.co/storage/v1/object/public/kaupunki-images/default.jpg'
-  //                 }
-  //               />
-  //             ) : (
-  //               <Image
-  //                 src={
-  //                   'https://yeopeoovpnhcjzmqilyz.supabase.co/storage/v1/object/public/kaupunki-images/default.jpg'
-  //                 }
-  //               />
-  //             )}
-  //           </Popup>
-  //         </Marker>
-  //       ))}
-  //     </MapContainer>
-  //   );
-  // };
 
   const FormView = () => {
     return (
@@ -85,17 +32,6 @@ function App() {
       <Navbar width={{ base: 100 }} p="xs">
         <Button onClick={() => setAppView('own')}>Omat</Button>
         <Button onClick={() => setAppView('map')}>Kartta</Button>
-        <Button
-          onClick={() => {
-            const center = map.getCenter();
-
-            setCenterLocations(
-              centerLocations.concat([[center.lat, center.lng]])
-            );
-          }}
-        >
-          Center
-        </Button>
       </Navbar>
     );
   };
