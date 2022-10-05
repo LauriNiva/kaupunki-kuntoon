@@ -7,11 +7,15 @@ import {
   Header,
   Modal,
   Navbar,
+  PasswordInput,
+  TextInput,
   Title,
 } from '@mantine/core';
 import { useState } from 'react';
+import { Link, Route, Routes } from 'react-router-dom';
 import Mapview from './components/Mapview';
 import NewReportForm from './components/NewReportForm';
+import { signInWithEmail } from './services/auth.service';
 
 function App() {
   const [appView, setAppView] = useState('map');
@@ -40,12 +44,46 @@ function App() {
     );
   };
 
-  const SideBar = () => {
+  const Login = () => {
     return (
-      <Navbar width={{ base: 100 }} p="xs">
-        <Button onClick={() => setAppView('own')}>Omat</Button>
-        <Button onClick={() => setAppView('map')}>Kartta</Button>
-      </Navbar>
+      <Container>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+
+            console.log(e.target.email.value);
+            signInWithEmail(e.target.email.value);
+          }}
+        >
+          <TextInput label="Sähköposti" name="email"></TextInput>
+
+          <Button type="submit">Kirjaudu</Button>
+        </form>
+        <Link to="/signup">
+          <Button mt={'lg'}>Luo käyttäjä</Button>
+        </Link>
+      </Container>
+    );
+  };
+
+  const Signup = () => {
+    return (
+      <Container>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+
+            console.log(e.target.email.value);
+            signInWithEmail(e.target.email.value);
+          }}
+        >
+          <TextInput label="Sähköposti" name="email" />
+          <TextInput label="Käyttäjänimi" name="username" />
+          <PasswordInput label="Salasana" name="password" />
+
+          <Button type="submit">Kirjaudu</Button>
+        </form>
+      </Container>
     );
   };
 
@@ -65,12 +103,15 @@ function App() {
             Kaupunki kuntoon
           </Title>
           <Group>
-            <Button color="teal.5" onClick={() => setAppView('own')}>
-              Omat
-            </Button>
-            <Button color="teal.5" onClick={() => setAppView('map')}>
-              Kartta
-            </Button>
+            <Link to="/own">
+              <Button color="teal.5">Omat</Button>
+            </Link>
+            <Link to="/">
+              <Button color="teal.5">Kartta</Button>
+            </Link>
+            <Link to="/login">
+              <Button>Login</Button>
+            </Link>
           </Group>
         </Container>
       </Header>
@@ -79,9 +120,12 @@ function App() {
   return (
     <div>
       <AppShell padding="0" header={<MainHeader />}>
-        {/* Appshell content */}
-        {appView === 'own' && <FormView />}
-        {appView === 'map' && <Mapview />}
+        <Routes>
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/own" element={<FormView />} />
+          <Route path="/" element={<Mapview />} />
+        </Routes>
       </AppShell>
     </div>
   );

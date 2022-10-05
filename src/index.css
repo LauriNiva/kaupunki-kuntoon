@@ -9,6 +9,11 @@ body {
   height: '100%';
 }
 
+button a {
+  text-decoration: inherit;
+  color: inherit;
+}
+
 .mapview-map {
   width: 100%;
   height: 100%;
