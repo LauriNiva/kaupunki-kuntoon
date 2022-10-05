@@ -1,5 +1,6 @@
 import {
   AppShell,
+  Box,
   Button,
   Container,
   Group,
@@ -24,13 +25,16 @@ function App() {
           Uusi
         </Button>
         <Modal
+          fullScreen
           centered
-          size="lg"
+          size="xl"
           opened={formModalOpen}
           onClose={() => setFormModalOpen(false)}
           title="Lisää ilmoitus"
         >
-          <NewReportForm />
+          <Box>
+            <NewReportForm />
+          </Box>
         </Modal>
       </>
     );
@@ -44,36 +48,37 @@ function App() {
       </Navbar>
     );
   };
+
+  const MainHeader = () => {
+    return (
+      <Header height={50} p="0">
+        <Container
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            height: '100%',
+            backgroundColor: '#364FC7',
+          }}
+        >
+          <Title color="teal.4" order={1}>
+            Kaupunki kuntoon
+          </Title>
+          <Group>
+            <Button color="teal.5" onClick={() => setAppView('own')}>
+              Omat
+            </Button>
+            <Button color="teal.5" onClick={() => setAppView('map')}>
+              Kartta
+            </Button>
+          </Group>
+        </Container>
+      </Header>
+    );
+  };
   return (
     <div>
-      <AppShell
-        padding="0"
-        header={
-          <Header height={50} p="0">
-            <Container
-              sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                height: '100%',
-                backgroundColor: '#364FC7',
-              }}
-            >
-              <Title color="teal.4" order={1}>
-                Kaupunki kuntoon
-              </Title>
-              <Group>
-                <Button color="teal.5" onClick={() => setAppView('own')}>
-                  Omat
-                </Button>
-                <Button color="teal.5" onClick={() => setAppView('map')}>
-                  Kartta
-                </Button>
-              </Group>
-            </Container>
-          </Header>
-        }
-      >
+      <AppShell padding="0" header={<MainHeader />}>
         {/* Appshell content */}
         {appView === 'own' && <FormView />}
         {appView === 'map' && <Mapview />}
