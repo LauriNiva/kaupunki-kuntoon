@@ -11,7 +11,7 @@ import {
 import { useState } from 'react';
 import { MapContainer, Marker, TileLayer } from 'react-leaflet';
 import { IconPhoto } from '@tabler/icons';
-import { addReport } from '../services/report.service';
+import { addReport, uploadImage } from '../services/report.service';
 
 function NewReportForm() {
   const [mapModalOpen, setMapModalOpen] = useState(false);
@@ -37,15 +37,17 @@ function NewReportForm() {
   return (
     <div>
       <form
-        onSubmit={form.onSubmit((values) => {
-          console.log({ ...values, chosenLocation });
-          const newReport = {
-            'lat': chosenLocation[0] ,
-            'long': chosenLocation[1] ,
-            'description' : values.kuvaus
+        onSubmit={form.onSubmit(async (values) => {
+          const uploadedImage = await uploadImage(imagePreview);
+          if (uploadedImage) {
+            const newReport = {
+              lat: chosenLocation[0],
+              long: chosenLocation[1],
+              description: values.kuvaus,
+              images: uploadedImage,
+            };
+            addReport(newReport);
           }
-          console.log(newReport)
-          addReport(newReport);
         })}
       >
         <Textarea
