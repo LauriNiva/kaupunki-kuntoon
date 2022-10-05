@@ -1,10 +1,19 @@
-import { AppShell, Button, Header, Modal, Navbar } from '@mantine/core';
+import {
+  AppShell,
+  Button,
+  Container,
+  Group,
+  Header,
+  Modal,
+  Navbar,
+  Title,
+} from '@mantine/core';
 import { useState } from 'react';
 import Mapview from './components/Mapview';
 import NewReportForm from './components/NewReportForm';
 
 function App() {
-  const [appView, setAppView] = useState('own');
+  const [appView, setAppView] = useState('map');
 
   const [formModalOpen, setFormModalOpen] = useState(false);
 
@@ -38,11 +47,30 @@ function App() {
   return (
     <div>
       <AppShell
-        padding="10"
-        navbar={<SideBar />}
+        padding="0"
         header={
-          <Header height={80} p="xs">
-            <h1>Kaupunki</h1>
+          <Header height={50} p="0">
+            <Container
+              sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                height: '100%',
+                backgroundColor: '#364FC7',
+              }}
+            >
+              <Title color="teal.4" order={1}>
+                Kaupunki kuntoon
+              </Title>
+              <Group>
+                <Button color="teal.5" onClick={() => setAppView('own')}>
+                  Omat
+                </Button>
+                <Button color="teal.5" onClick={() => setAppView('map')}>
+                  Kartta
+                </Button>
+              </Group>
+            </Container>
           </Header>
         }
       >
