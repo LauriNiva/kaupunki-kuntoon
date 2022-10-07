@@ -15,6 +15,9 @@ import { IconPhoto } from '@tabler/icons';
 import { addReport, uploadImage } from '../services/report.service';
 import Compressor from 'compressorjs';
 import { useNavigate } from 'react-router-dom';
+import { showNotification } from '@mantine/notifications';
+import { useDispatch } from 'react-redux';
+import { concatNewReport } from '../reducers/reportReducer';
 
 function NewReportForm() {
   const [mapModalOpen, setMapModalOpen] = useState(false);
@@ -26,6 +29,7 @@ function NewReportForm() {
   const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const form = useForm({
     initialValues: {
@@ -43,29 +47,42 @@ function NewReportForm() {
 
   const handleSubmit = async (values) => {
     setIsLoading(true);
-    new Compressor(imagePreview, {
-      quality: 0.6,
-      maxHeight: 2000,
-      maxWidth: 2000,
-      success(result) {
-        uploadImage(result).then((uploadedImage) => {
-          if (uploadedImage) {
-            const newReport = {
-              lat: chosenLocation[0],
-              long: chosenLocation[1],
-              description: values.kuvaus,
-              images: uploadedImage,
-            };
-            addReport(newReport);
-            setIsLoading(false);
-            navigate('/');
-          }
-        });
-      },
-      error(error) {
-        console.log('Error compressing image:', error);
-      },
-    });
+    try {
+      
+      new Compressor(imagePreview, {
+        quality: 0.6,
+        maxHeight: 2000,
+        maxWidth: 2000,
+        success(result) {
+          uploadImage(result).then((uploadedImage) => {
+            if (uploadedImage) {
+              const newReport = {
+                lat: chosenLocation[0],
+                long: chosenLocation[1],
+                description: values.kuvaus,
+                images: uploadedImage,
+              };
+              addReport(newReport).then((addedReport) => {
+                showNotification({
+                  title: 'Uusi raportti',
+                  message: 'Raportti lisätty!',
+                  autoClose: 5000,
+                });
+                console.log('addedReport', addedReport);
+                dispatch(concatNewReport(addedReport));
+                setIsLoading(false);
+                navigate('/');
+              });
+            }
+          });
+        },
+        error(error) {
+          console.log('Error compressing image:', error);
+        },
+      });
+    } catch (error) {
+      console.log('---error---',error);
+    }
   };
 
   return (
