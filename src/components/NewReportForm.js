@@ -7,12 +7,14 @@ import {
   Image,
   Modal,
   Textarea,
-  TextInput,
+  Loader,
 } from '@mantine/core';
 import { useState } from 'react';
 import { MapContainer, Marker, TileLayer } from 'react-leaflet';
 import { IconPhoto } from '@tabler/icons';
 import { addReport, uploadImage } from '../services/report.service';
+import Compressor from 'compressorjs';
+import { useNavigate } from 'react-router-dom';
 
 function NewReportForm() {
   const [mapModalOpen, setMapModalOpen] = useState(false);
@@ -20,6 +22,10 @@ function NewReportForm() {
   const [formMap, setFormMap] = useState();
   const [smallFormMap, setSmallFormMap] = useState();
   const [imagePreview, setImagePreview] = useState(null);
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   const form = useForm({
     initialValues: {
@@ -35,11 +41,14 @@ function NewReportForm() {
     smallFormMap.setView([centerLocation.lat, centerLocation.lng]);
   };
 
-  return (
-    <Container>
-      <form
-        onSubmit={form.onSubmit(async (values) => {
-          const uploadedImage = await uploadImage(imagePreview);
+  const handleSubmit = async (values) => {
+    setIsLoading(true);
+    new Compressor(imagePreview, {
+      quality: 0.6,
+      maxHeight: 2000,
+      maxWidth: 2000,
+      success(result) {
+        uploadImage(result).then((uploadedImage) => {
           if (uploadedImage) {
             const newReport = {
               lat: chosenLocation[0],
@@ -48,9 +57,20 @@ function NewReportForm() {
               images: uploadedImage,
             };
             addReport(newReport);
+            setIsLoading(false);
+            navigate('/');
           }
-        })}
-      >
+        });
+      },
+      error(error) {
+        console.log('Error compressing image:', error);
+      },
+    });
+  };
+
+  return (
+    <Container>
+      <form onSubmit={form.onSubmit(handleSubmit)}>
         <Textarea
           required
           label="Kuvaus"
@@ -70,7 +90,11 @@ function NewReportForm() {
             icon={<IconPhoto size={26} />}
           />
           {imagePreview && (
-            <Image height={'30vh'} m={'md'} src={URL.createObjectURL(imagePreview)} />
+            <Image
+              height={'30vh'}
+              m={'md'}
+              src={URL.createObjectURL(imagePreview)}
+            />
           )}
         </Group>
 
@@ -96,7 +120,7 @@ function NewReportForm() {
           </MapContainer>
         </Group>
         <Group mt={'md'} position="right">
-          <Button type="submit">Lisää</Button>
+          {isLoading ? <Loader /> : <Button type="submit">Lisää</Button>}
         </Group>
       </form>
       <Modal
