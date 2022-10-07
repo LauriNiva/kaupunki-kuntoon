@@ -1,6 +1,7 @@
 import { useForm } from '@mantine/form';
 import {
   Button,
+  Container,
   FileInput,
   Group,
   Image,
@@ -35,7 +36,7 @@ function NewReportForm() {
   };
 
   return (
-    <div>
+    <Container>
       <form
         onSubmit={form.onSubmit(async (values) => {
           const uploadedImage = await uploadImage(imagePreview);
@@ -69,7 +70,7 @@ function NewReportForm() {
             icon={<IconPhoto size={26} />}
           />
           {imagePreview && (
-            <Image m={'md'} src={URL.createObjectURL(imagePreview)} />
+            <Image height={'30vh'} m={'md'} src={URL.createObjectURL(imagePreview)} />
           )}
         </Group>
 
@@ -122,7 +123,7 @@ function NewReportForm() {
           <Button onClick={updateLocation}>Lisää</Button>
         </Group>
       </Modal>
-    </div>
+    </Container>
   );
 }
 
