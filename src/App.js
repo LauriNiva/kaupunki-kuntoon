@@ -15,18 +15,20 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, Route, Routes, useNavigate } from 'react-router-dom';
 import Mapview from './components/Mapview';
 import NewReportForm from './components/NewReportForm';
-import {
-  signOut,
-  signUpNewUser,
-} from './services/auth.service';
+import { signOut, signUpNewUser } from './services/auth.service';
 import { loginUser, setSession } from './reducers/sessionReducer';
 import { supabase } from './supabaseClient';
+import { setInitialReports } from './reducers/reportReducer';
+import { setInitialPublicReports } from './reducers/publicReportReducer';
 
 function App() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const session = useSelector((state) => state.sessions);
+
+  const reports = useSelector((state) => state.reports);
+  console.log('---reports---:', reports);
   const user = session?.user;
   console.log('---user---:', user);
 
@@ -46,6 +48,14 @@ function App() {
       dispatch(setSession(session));
     });
   }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(setInitialPublicReports());
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(setInitialReports(session?.user.id));
+  }, [session, dispatch]);
 
   const FormView = () => {
     return (
@@ -79,8 +89,7 @@ function App() {
             e.preventDefault();
             const email = e.target.email.value;
             const password = e.target.password.value;
-            dispatch(loginUser(email, password))
-            
+            dispatch(loginUser(email, password));
           }}
         >
           <TextInput label="Sähköposti" name="email"></TextInput>
