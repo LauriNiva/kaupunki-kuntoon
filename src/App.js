@@ -56,24 +56,11 @@ function App() {
     dispatch(setInitialReports(session?.user.id));
   }, [session, dispatch]);
 
-  const FormView = () => {
+  const OwnReports = () => {
     return (
       <>
-        <Button size="md" onClick={() => setFormModalOpen(true)}>
-          Uusi
-        </Button>
-        <Modal
-          fullScreen
-          centered
-          size="xl"
-          opened={formModalOpen}
-          onClose={() => setFormModalOpen(false)}
-          title="Lisää ilmoitus"
-        >
-          <Box>
-            <NewReportForm />
-          </Box>
-        </Modal>
+      <Title order={2}>Omat raportit</Title>
+        
       </>
     );
   };
@@ -185,7 +172,7 @@ function App() {
         <Routes>
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/own" element={<FormView />} />
+          <Route path="/own" element={<OwnReports />} />
           <Route path="/new" element={<NewReportForm />} />
           <Route path="/" element={<Mapview />} />
         </Routes>
