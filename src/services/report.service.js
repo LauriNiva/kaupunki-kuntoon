@@ -12,9 +12,10 @@ export const getMarkers = async () => {
 
 
 export const addReport = async (newReport) => {
-  const { data, error } = await supabase.from('reports').insert([newReport])
+  const { data, error } = await supabase.from('reports').insert([newReport]).select();
 
   if (error) console.log(error);
+  if (data) console.log(data);
 
 
 }
