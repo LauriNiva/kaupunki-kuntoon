@@ -49,8 +49,8 @@ function Mapview() {
     return reportsToShow().map((location) => {
       const icon =
         location.user_id === user?.id
-          ? generateCustomMarker('#FFF')
-          : generateCustomMarker('#583470');
+          ? generateCustomMarker('#7f52ef')
+          : generateCustomMarker('#822110');
       return (
         <Marker
           icon={icon}
