@@ -8,13 +8,13 @@ const reportSlice = createSlice({
     setReports: (state, action) => {
       return action.payload;
     },
-    addReport: (state, action) => {
+    concatNewReport: (state, action) => {
       return state.concat(action.payload);
     },
   },
 });
 
-export const { setReports, clearReports } = reportSlice.actions;
+export const { setReports, concatNewReport } = reportSlice.actions;
 
 export const setInitialReports = (userid) => {
   return async (dispatch) => {
