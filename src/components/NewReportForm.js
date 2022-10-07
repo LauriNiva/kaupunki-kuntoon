@@ -47,8 +47,6 @@ function NewReportForm() {
 
   const handleSubmit = async (values) => {
     setIsLoading(true);
-    try {
-      
       new Compressor(imagePreview, {
         quality: 0.6,
         maxHeight: 2000,
@@ -80,9 +78,6 @@ function NewReportForm() {
           console.log('Error compressing image:', error);
         },
       });
-    } catch (error) {
-      console.log('---error---',error);
-    }
   };
 
   return (
