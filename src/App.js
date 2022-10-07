@@ -16,12 +16,10 @@ import { Link, Route, Routes, useNavigate } from 'react-router-dom';
 import Mapview from './components/Mapview';
 import NewReportForm from './components/NewReportForm';
 import {
-  signInWithEmailAndPassword,
-  signInWithMagiclink,
   signOut,
   signUpNewUser,
 } from './services/auth.service';
-import { loginUser, setSession } from './sessionReducer';
+import { loginUser, setSession } from './reducers/sessionReducer';
 import { supabase } from './supabaseClient';
 
 function App() {

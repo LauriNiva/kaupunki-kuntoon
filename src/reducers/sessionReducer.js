@@ -2,7 +2,8 @@ import { createSlice } from '@reduxjs/toolkit';
 import {
   signInWithEmailAndPassword,
   signInWithMagiclink,
-} from './services/auth.service';
+  signOut,
+} from '../services/auth.service';
 
 const sessionSlice = createSlice({
   name: 'session',
@@ -28,5 +29,12 @@ export const loginUser = (email, password) => {
     }
   };
 };
+
+export const signoutUser = () => {
+  return async (dispatch) => {
+    await signOut();
+    dispatch(removeSession);
+  }
+}
 
 export default sessionSlice.reducer;
