@@ -11,6 +11,7 @@ import {
   Title,
 } from '@mantine/core';
 import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, Route, Routes, useNavigate } from 'react-router-dom';
 import Mapview from './components/Mapview';
 import NewReportForm from './components/NewReportForm';
@@ -20,35 +21,33 @@ import {
   signOut,
   signUpNewUser,
 } from './services/auth.service';
+import { loginUser, setSession } from './sessionReducer';
 import { supabase } from './supabaseClient';
 
 function App() {
-
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const [session, setSession] = useState(null);
+  const session = useSelector((state) => state.sessions);
   const user = session?.user;
   console.log('---user---:', user);
 
   const [formModalOpen, setFormModalOpen] = useState(false);
 
-
-  const getSession = async () => {
-    const sessiondata = await supabase.auth.getSession();
-    if (sessiondata) {
-      console.log('---session---: ', sessiondata.data.session);
-      setSession(sessiondata.data.session);
-    }
-  };
-
   useEffect(() => {
+    const getSession = async () => {
+      const sessiondata = await supabase.auth.getSession();
+      if (sessiondata) {
+        console.log('---session---: ', sessiondata.data.session);
+        dispatch(setSession(sessiondata.data.session));
+      }
+    };
     getSession();
 
     supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
+      dispatch(setSession(session));
     });
-
-  }, []);
+  }, [dispatch]);
 
   const FormView = () => {
     return (
@@ -73,24 +72,17 @@ function App() {
   };
 
   const Login = () => {
-
-    if(session) navigate('/')
+    if (session) navigate('/');
 
     return (
       <Container>
         <form
-          onSubmit={ async (e) => {
+          onSubmit={async (e) => {
             e.preventDefault();
-
-            console.log(e.target.email.value);
-            if (!e.target.password.value) {
-              await signInWithMagiclink(e.target.email.value);
-            } else {
-              await signInWithEmailAndPassword(
-                e.target.email.value,
-                e.target.password.value
-              );
-            }
+            const email = e.target.email.value;
+            const password = e.target.password.value;
+            dispatch(loginUser(email, password))
+            
           }}
         >
           <TextInput label="Sähköposti" name="email"></TextInput>
@@ -135,14 +127,13 @@ function App() {
   };
 
   const LoginButton = () => {
-
     const handleSignout = async () => {
       try {
         await signOut();
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
-    }
+    };
 
     return !user ? (
       <Link to="/login">

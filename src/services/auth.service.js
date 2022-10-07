@@ -1,7 +1,7 @@
 import { supabase } from "../supabaseClient";
 
 export const signInWithMagiclink = async (email) => {
-  const { user, session , error } = await supabase.auth.signIn({
+  const { user, session , error } = await supabase.auth.signInWithOtp({
     email
   });
 }
@@ -14,7 +14,7 @@ export const signInWithEmailAndPassword = async (email, password) => {
 }
 
 export const signUpNewUser = async (email, username, password) => {
-  const { user, session, error } = await supabase.auth.signInWithOtp({
+  const { user, session, error } = await supabase.auth.signUp({
     email,
     password,
   });
