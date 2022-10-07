@@ -49,11 +49,10 @@ function App() {
     });
   }, [dispatch]);
 
-  useEffect(() => {
-    dispatch(setInitialPublicReports());
-  }, [dispatch]);
 
   useEffect(() => {
+    dispatch(setInitialPublicReports());
+
     dispatch(setInitialReports(session?.user.id));
   }, [session, dispatch]);
 
