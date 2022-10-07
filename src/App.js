@@ -164,14 +164,14 @@ function App() {
             Kaupunki kuntoon
           </Title>
           <Group>
-            <Link to="/own">
-              <Button color="teal.5">Omat</Button>
+            <Link to="/">
+              <Button color="teal.5">Kartta</Button>
             </Link>
             <Link to="/new">
               <Button color="teal.5">Uusi</Button>
             </Link>
-            <Link to="/">
-              <Button color="teal.5">Kartta</Button>
+            <Link to="/own">
+              <Button color="teal.5">Omat</Button>
             </Link>
             <LoginButton />
           </Group>
