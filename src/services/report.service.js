@@ -10,7 +10,6 @@ export const getPublicReports = async () => {
 };
 
 export const getOwnReports = async (userid) => {
-
   const { data, error } = await supabase
     .from('reports')
     .select()
@@ -28,7 +27,10 @@ export const addReport = async (newReport) => {
     .select();
 
   if (error) console.log(error);
-  if (data) console.log(data);
+  if (data) {
+    console.log('New report added', data);
+    return data;
+  }
 };
 
 export const uploadImage = async (newImage) => {
