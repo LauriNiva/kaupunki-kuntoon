@@ -44,6 +44,8 @@ function Userprofile() {
         dispatch(setUser(data.username));
         setAvatar(data.avatar);
         setIsLoading(false);
+      }else {
+        setIsLoading(false);
       }
     };
     getProfile();
