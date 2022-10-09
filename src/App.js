@@ -24,12 +24,46 @@ function App() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const [isUsernameSet, setIsUsernameSet] = useState(false);
+
   const session = useSelector((state) => state.sessions);
 
   const reports = useSelector((state) => state.reports);
   console.log('---reports---:', reports);
   const user = session?.user;
   console.log('---user---:', user);
+  
+  
+  useEffect(() => {
+    if (user && !isUsernameSet) {
+      console.log('-----BLOOP-----');
+      navigate('/userprofile')
+    }
+  }, [user, isUsernameSet, navigate]);
+
+  useEffect(() => {
+    const checkUsername = async () => {
+      try {
+        const userid = session?.user.id;
+        console.log('userid', userid);
+        if (userid) {
+          const { data, error, status } = await supabase
+            .from('profiles')
+            .select('username')
+            .eq('id', userid)
+            .single();
+          if (data) {
+            console.log('data with username', data);
+            setIsUsernameSet(true);
+          }
+        }
+      } catch (error) {
+        console.log('error while checking username', error);
+      }
+    };
+
+    checkUsername();
+  }, [session]);
 
   useEffect(() => {
     const getSession = async () => {
@@ -48,7 +82,6 @@ function App() {
 
   useEffect(() => {
     dispatch(setInitialPublicReports());
-
     dispatch(setInitialReports(session?.user.id));
   }, [session, dispatch]);
 
@@ -95,10 +128,7 @@ function App() {
             console.log(e.target.email.value);
             console.log(e.target.password.value);
 
-            signUpNewUser(
-              e.target.email.value,
-              e.target.password.value
-            );
+            signUpNewUser(e.target.email.value, e.target.password.value);
           }}
         >
           <TextInput label="Sähköposti" name="email" />
