@@ -1,7 +1,4 @@
-import {
-  AppShell,
-  Title,
-} from '@mantine/core';
+import { AppShell, Title } from '@mantine/core';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Route, Routes, useNavigate } from 'react-router-dom';
@@ -22,7 +19,6 @@ function App() {
   const dispatch = useDispatch();
 
   const session = useSelector((state) => state.sessions);
-
 
   useEffect(() => {
     const getSession = async () => {
