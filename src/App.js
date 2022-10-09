@@ -18,6 +18,7 @@ import { loginUser, setSession } from './reducers/sessionReducer';
 import { supabase } from './supabaseClient';
 import { setInitialReports } from './reducers/reportReducer';
 import { setInitialPublicReports } from './reducers/publicReportReducer';
+import Userprofile from './components/Userprofile';
 
 function App() {
   const navigate = useNavigate();
@@ -168,6 +169,7 @@ function App() {
         <Routes>
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/userprofile" element={<Userprofile />} />
           <Route path="/own" element={<OwnReports />} />
           <Route path="/new" element={<NewReportForm />} />
           <Route path="/" element={<Mapview />} />
