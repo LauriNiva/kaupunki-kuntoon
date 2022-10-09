@@ -4,6 +4,7 @@ import {
   Container,
   Group,
   Header,
+  Loader,
   Menu,
   PasswordInput,
   TextInput,
@@ -23,12 +24,13 @@ import { setInitialPublicReports } from './reducers/publicReportReducer';
 import Userprofile from './components/Userprofile';
 import { setUser } from './reducers/userReducer';
 import Avatar from 'boring-avatars';
+import { IconLogout, IconUserCircle } from '@tabler/icons';
 
 function App() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const usernameFound = useSelector((state) => state.users);
+  const username = useSelector((state) => state.users);
   const session = useSelector((state) => state.sessions);
 
   const loggedinUser = session?.user;
@@ -47,7 +49,6 @@ function App() {
       dispatch(setSession(session));
     });
   }, [dispatch]);
-
 
   useEffect(() => {
     const checkUsername = async () => {
@@ -114,15 +115,13 @@ function App() {
   };
 
   const Signup = () => {
+    if (session) navigate('/');
+
     return (
       <Container>
         <form
           onSubmit={(e) => {
             e.preventDefault();
-
-            console.log(e.target.email.value);
-            console.log(e.target.password.value);
-
             signUpNewUser(e.target.email.value, e.target.password.value);
           }}
         >
@@ -137,9 +136,7 @@ function App() {
     );
   };
 
-  const LoginButton = () => {
-
-
+  const MenuButton = () => {
     const handleSignout = async () => {
       try {
         await signOut();
@@ -148,23 +145,25 @@ function App() {
       }
     };
 
-    return !loggedinUser ? (
-      <Link to="/login">
-        <Button>Login</Button>
-      </Link>
-    ) : (
-      <Menu>
+    return (
+      <Menu className="top-menu">
         <Menu.Target>
           <UnstyledButton>
-            <Avatar />
+            {username ? <Avatar variant='ring' name={username}/>: <Loader />}
           </UnstyledButton>
         </Menu.Target>
         <Menu.Dropdown>
-          <Menu.Item onClick={handleSignout}>Logout</Menu.Item>
+          <Link className="top-menu-link" to="/userprofile">
+            <Menu.Item icon={<IconUserCircle />}>Profiili</Menu.Item>
+          </Link>
+          <Menu.Item icon={<IconLogout />} onClick={handleSignout}>
+            Kirjaudu Ulos
+          </Menu.Item>
         </Menu.Dropdown>
       </Menu>
     );
   };
+
   const MainHeader = () => {
     return (
       <Header sx={{ backgroundColor: '#364FC7' }} height={50} p="0">
@@ -183,7 +182,7 @@ function App() {
             <Link to="/">
               <Button color="teal.5">Kartta</Button>
             </Link>
-            {loggedinUser && (
+            {loggedinUser ? (
               <>
                 <Link to="/new">
                   <Button color="teal.5">Uusi</Button>
@@ -191,9 +190,13 @@ function App() {
                 <Link to="/own">
                   <Button color="teal.5">Omat</Button>
                 </Link>
+                <MenuButton />
               </>
+            ) : (
+              <Link to="/login">
+                <Button>Login</Button>
+              </Link>
             )}
-            <LoginButton />
           </Group>
         </Container>
       </Header>
