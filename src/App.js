@@ -8,8 +8,9 @@ import {
   PasswordInput,
   TextInput,
   Title,
+  UnstyledButton,
 } from '@mantine/core';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, Route, Routes, useNavigate } from 'react-router-dom';
 import Mapview from './components/Mapview';
@@ -27,44 +28,10 @@ function App() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const isUsernameSet = useSelector((state) => state.users);
+  const usernameFound = useSelector((state) => state.users);
   const session = useSelector((state) => state.sessions);
 
-  const reports = useSelector((state) => state.reports);
-  console.log('---reports---:', reports);
-  const user = session?.user;
-  console.log('---user---:', user);
-
-  useEffect(() => {
-    if (user && !isUsernameSet) {
-      console.log('-----BLOOP-----');
-      navigate('/userprofile');
-    }
-  }, [user, isUsernameSet, navigate]);
-
-  useEffect(() => {
-    const checkUsername = async () => {
-      try {
-        const userid = session?.user.id;
-        console.log('userid', userid);
-        if (userid) {
-          const { data, error, status } = await supabase
-            .from('profiles')
-            .select('username')
-            .eq('id', userid)
-            .single();
-          if (data) {
-            console.log('data with username', data);
-            dispatch(setUser(data.username));
-          }
-        }
-      } catch (error) {
-        console.log('error while checking username', error);
-      }
-    };
-
-    checkUsername();
-  }, [session, dispatch]);
+  const loggedinUser = session?.user;
 
   useEffect(() => {
     const getSession = async () => {
@@ -80,6 +47,33 @@ function App() {
       dispatch(setSession(session));
     });
   }, [dispatch]);
+
+
+  useEffect(() => {
+    const checkUsername = async () => {
+      try {
+        const userid = session?.user.id;
+        console.log('userid', userid);
+        if (userid) {
+          const { data, error, status } = await supabase
+            .from('profiles')
+            .select('username')
+            .eq('id', userid)
+            .single();
+          if (data) {
+            console.log('data with username', data);
+            dispatch(setUser(data.username));
+          } else {
+            navigate('/userprofile');
+          }
+        }
+      } catch (error) {
+        console.log('error while checking username', error);
+      }
+    };
+
+    checkUsername();
+  }, [session, dispatch, navigate]);
 
   useEffect(() => {
     dispatch(setInitialPublicReports());
@@ -145,7 +139,6 @@ function App() {
 
   const LoginButton = () => {
 
-    const [isMenuOpen, setIsMenuOpen] = useState(false)
 
     const handleSignout = async () => {
       try {
@@ -155,19 +148,19 @@ function App() {
       }
     };
 
-    return !user ? (
+    return !loggedinUser ? (
       <Link to="/login">
         <Button>Login</Button>
       </Link>
     ) : (
-      <Menu opened={isMenuOpen}>
+      <Menu>
         <Menu.Target>
-          <Avatar onClick={()=>setIsMenuOpen(true)} />
+          <UnstyledButton>
+            <Avatar />
+          </UnstyledButton>
         </Menu.Target>
         <Menu.Dropdown>
-          <Menu.Item>
-            <Button onClick={handleSignout}>Logout</Button>
-          </Menu.Item>
+          <Menu.Item onClick={handleSignout}>Logout</Menu.Item>
         </Menu.Dropdown>
       </Menu>
     );
@@ -190,7 +183,7 @@ function App() {
             <Link to="/">
               <Button color="teal.5">Kartta</Button>
             </Link>
-            {user && (
+            {loggedinUser && (
               <>
                 <Link to="/new">
                   <Button color="teal.5">Uusi</Button>
