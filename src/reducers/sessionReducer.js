@@ -34,7 +34,7 @@ export const signoutUser = () => {
   return async (dispatch) => {
     await signOut();
     dispatch(removeSession);
-  }
-}
+  };
+};
 
 export default sessionSlice.reducer;
