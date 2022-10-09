@@ -102,6 +102,7 @@ function App() {
         >
           <TextInput label="Sähköposti" name="email" />
           <PasswordInput label="Salasana" name="password" />
+          {/* TODO salasana vaatimukset ja uudelleen tarkistus toimimaan */}
           <PasswordInput label="Salasana uudelleen" name="password-check" />
 
           <Button type="submit">Luo käyttäjä</Button>
