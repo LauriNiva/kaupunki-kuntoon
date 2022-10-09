@@ -18,6 +18,9 @@ function Mapview() {
   const [showOwnReports, setShowOwnReports] = useState(true);
   const [showPublicReports, setShowPublicReports] = useState(true);
 
+  const ownMarkerColor = '#7950F2'; // violet.6
+  const publicMarkerColor = '#D6336C'; // pink.7
+
   const reportsToShow = () => {
     let reportsToReturn = [];
     if (showOwnReports) reportsToReturn = reportsToReturn.concat(reports);
@@ -52,8 +55,8 @@ function Mapview() {
     return reportsToShow().map((location) => {
       const icon =
         location.user_id === user?.id
-          ? generateCustomMarker('#7f52ef')
-          : generateCustomMarker('#822110');
+          ? generateCustomMarker(ownMarkerColor)
+          : generateCustomMarker(publicMarkerColor);
       return (
         <Marker
           icon={icon}
@@ -88,15 +91,17 @@ function Mapview() {
     return (
       <Group position={'right'}>
         <Container className="map-filter-panel" p={'md'}>
-          <Title order={3}>Suodata</Title>
           <Checkbox
             checked={showOwnReports}
             onChange={() => setShowOwnReports(!showOwnReports)}
+            color={'violet.6'}
             label="Omat"
+            mb={'xs'}
           />
           <Checkbox
             checked={showPublicReports}
             onChange={() => setShowPublicReports(!showPublicReports)}
+            color={'pink.7'}
             label="Julkiset"
           />
         </Container>
