@@ -92,18 +92,15 @@ function App() {
             e.preventDefault();
 
             console.log(e.target.email.value);
-            console.log(e.target.username.value);
             console.log(e.target.password.value);
 
             signUpNewUser(
               e.target.email.value,
-              e.target.username.value,
               e.target.password.value
             );
           }}
         >
           <TextInput label="Sähköposti" name="email" />
-          <TextInput label="Käyttäjänimi" name="username" />
           <PasswordInput label="Salasana" name="password" />
           <PasswordInput label="Salasana uudelleen" name="password-check" />
 
