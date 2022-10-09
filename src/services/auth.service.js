@@ -4,6 +4,7 @@ export const signInWithMagiclink = async (email) => {
   const { user, session , error } = await supabase.auth.signInWithOtp({
     email
   });
+  if(session) return session;
 }
 
 export const signInWithEmailAndPassword = async (email, password) => {
@@ -11,6 +12,8 @@ export const signInWithEmailAndPassword = async (email, password) => {
     email,
     password,
   });
+  if (session) return session;
+
 }
 
 export const signUpNewUser = async (email, username, password) => {
