@@ -139,6 +139,8 @@ function Userprofile() {
           <Text>{email}</Text>
           <Avatar variant='ring' size={160} name={username}  />
           <Text>{username}</Text>
+
+          TODO Salasanan vaihtaminen
         </>
       )}
     </Container>
