@@ -9,12 +9,15 @@ import {
   TextInput,
   Title,
 } from '@mantine/core';
+import { showNotification } from '@mantine/notifications';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { setUser } from '../reducers/userReducer';
 import { supabase } from '../supabaseClient';
 
 function Userprofile() {
-  const [username, setUsername] = useState(null);
+  const dispatch = useDispatch();
+  const username = useSelector((state) => state.users);
   const [avatar, setAvatar] = useState(null);
 
   const [isLoading, setIsLoading] = useState(true);
@@ -38,13 +41,13 @@ function Userprofile() {
         console.log('error fetching profile', error);
       }
       if (data) {
-        setUsername(data.username);
+        dispatch(setUser(data.username));
         setAvatar(data.avatar);
         setIsLoading(false);
       }
     };
     getProfile();
-  }, [session]);
+  }, [session, dispatch]);
 
   const AddUsername = () => {
     const handleUsernameSubmit = async () => {
@@ -65,18 +68,22 @@ function Userprofile() {
 
       if (error) {
         console.log('error creating a profile', error);
-        if(error.code === "23505"){
-        setUsernameInputError('Käyttäjänimi on jo käytössä');
-
+        if (error.code === '23505') {
+          setUsernameInputError('Käyttäjänimi on jo käytössä');
         }
       }
 
       if (data) {
         console.log(data);
-        setUsername(data[0]?.username);
+        dispatch(setUser(data[0]?.username));
+        setIsLoading(false);
+        showNotification({
+          title: 'Käyttäjänimi luotu!',
+          message: `Hei, ${data[0]?.username}!`,
+          autoClose: 5000,
+        });
       }
     };
-    
 
     return (
       <Modal

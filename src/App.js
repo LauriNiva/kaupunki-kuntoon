@@ -19,25 +19,24 @@ import { supabase } from './supabaseClient';
 import { setInitialReports } from './reducers/reportReducer';
 import { setInitialPublicReports } from './reducers/publicReportReducer';
 import Userprofile from './components/Userprofile';
+import { setUser } from './reducers/userReducer';
 
 function App() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [isUsernameSet, setIsUsernameSet] = useState(false);
-
+  const isUsernameSet = useSelector((state) => state.users);
   const session = useSelector((state) => state.sessions);
 
   const reports = useSelector((state) => state.reports);
   console.log('---reports---:', reports);
   const user = session?.user;
   console.log('---user---:', user);
-  
-  
+
   useEffect(() => {
     if (user && !isUsernameSet) {
       console.log('-----BLOOP-----');
-      navigate('/userprofile')
+      navigate('/userprofile');
     }
   }, [user, isUsernameSet, navigate]);
 
@@ -54,7 +53,7 @@ function App() {
             .single();
           if (data) {
             console.log('data with username', data);
-            setIsUsernameSet(true);
+            dispatch(setUser(data.username));
           }
         }
       } catch (error) {
@@ -63,7 +62,7 @@ function App() {
     };
 
     checkUsername();
-  }, [session]);
+  }, [session, dispatch]);
 
   useEffect(() => {
     const getSession = async () => {
