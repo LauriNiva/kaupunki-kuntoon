@@ -1,11 +1,9 @@
 import {
   AppShell,
-  Box,
   Button,
   Container,
   Group,
   Header,
-  Modal,
   PasswordInput,
   TextInput,
   Title,
@@ -32,8 +30,6 @@ function App() {
   const user = session?.user;
   console.log('---user---:', user);
 
-  const [formModalOpen, setFormModalOpen] = useState(false);
-
   useEffect(() => {
     const getSession = async () => {
       const sessiondata = await supabase.auth.getSession();
@@ -49,7 +45,6 @@ function App() {
     });
   }, [dispatch]);
 
-
   useEffect(() => {
     dispatch(setInitialPublicReports());
 
@@ -59,8 +54,7 @@ function App() {
   const OwnReports = () => {
     return (
       <>
-      <Title order={2}>Omat raportit</Title>
-        
+        <Title order={2}>Omat raportit</Title>
       </>
     );
   };
@@ -154,12 +148,16 @@ function App() {
             <Link to="/">
               <Button color="teal.5">Kartta</Button>
             </Link>
-            <Link to="/new">
-              <Button color="teal.5">Uusi</Button>
-            </Link>
-            <Link to="/own">
-              <Button color="teal.5">Omat</Button>
-            </Link>
+            {user && (
+              <>
+                <Link to="/new">
+                  <Button color="teal.5">Uusi</Button>
+                </Link>
+                <Link to="/own">
+                  <Button color="teal.5">Omat</Button>
+                </Link>
+              </>
+            )}
             <LoginButton />
           </Group>
         </Container>
