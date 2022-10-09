@@ -153,6 +153,7 @@ function App() {
           </UnstyledButton>
         </Menu.Target>
         <Menu.Dropdown>
+          <Menu.Label>{username}</Menu.Label>
           <Link className="top-menu-link" to="/userprofile">
             <Menu.Item icon={<IconUserCircle />}>Profiili</Menu.Item>
           </Link>
