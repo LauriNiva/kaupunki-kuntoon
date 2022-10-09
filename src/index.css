@@ -7,6 +7,10 @@ button a {
   color: inherit;
 }
 
+.top-menu-link{
+  text-decoration: none;
+}
+
 .mapview-map {
   width: 100%;
   height: 100%;
