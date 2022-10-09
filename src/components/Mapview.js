@@ -1,4 +1,4 @@
-import { Image } from '@mantine/core';
+import { Checkbox, Container, Group, Image, Title } from '@mantine/core';
 import React, { useState } from 'react';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import { useSelector } from 'react-redux';
@@ -12,15 +12,18 @@ function Mapview() {
 
   const reports = useSelector((state) => state.reports);
   const publicReports = useSelector((state) => state.publicReports);
+  const publicReportsToShow = publicReports.filter((report) => report.user_id !== user.id);
+
+
+  const [showOwnReports, setShowOwnReports] = useState(true);
+  const [showPublicReports, setShowPublicReports] = useState(true);
 
   const reportsToShow = () => {
-    if (user) {
-      return reports.concat(
-        publicReports.filter((report) => report.user_id !== user.id)
-      );
-    } else {
-      return publicReports;
-    }
+    let reportsToReturn = [];
+    if (showOwnReports) reportsToReturn = reportsToReturn.concat(reports);
+    if (showPublicReports) reportsToReturn = reportsToReturn.concat(publicReportsToShow);
+
+    return reportsToReturn;
   };
 
   const generateCustomMarker = (myCustomColour) => {
@@ -81,21 +84,44 @@ function Mapview() {
     });
   };
 
+  const FiltersPanel = () => {
+    return (
+      <Group position={'right'}>
+        <Container className="map-filter-panel" p={'md'}>
+          <Title order={3}>Suodata</Title>
+          <Checkbox
+            checked={showOwnReports}
+            onChange={() => setShowOwnReports(!showOwnReports)}
+            label="Omat"
+          />
+          <Checkbox
+            checked={showPublicReports}
+            onChange={() => setShowPublicReports(!showPublicReports)}
+            label="Julkiset"
+          />
+        </Container>
+      </Group>
+    );
+  };
+
   return (
-    <MapContainer
-      center={[64.07391245239761, 24.53362472782081]}
-      zoom={20}
-      scrollWheelZoom={false}
-      className="mapview-map"
-      ref={setMap}
-    >
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-      {/* <span className="crosshair">+</span> */}
-      {generateMarkers()}
-    </MapContainer>
+    <>
+      <FiltersPanel />
+      <MapContainer
+        center={[64.07391245239761, 24.53362472782081]}
+        zoom={20}
+        scrollWheelZoom={false}
+        className="mapview-map"
+        ref={setMap}
+      >
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        {/* <span className="crosshair">+</span> */}
+        {generateMarkers()}
+      </MapContainer>
+    </>
   );
 }
 

@@ -17,6 +17,16 @@ button a {
   z-index: 2;
 }
 
+.map-filter-panel{
+  position: absolute;
+  top: 55px;
+  right: 5px;
+  z-index: 4;
+  background-color: rgb(201, 201, 242);
+  border-radius: 5px;
+
+}
+
 .report-popup {
   width: 400px;
 }
