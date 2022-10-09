@@ -10,6 +10,7 @@ import {
   Title,
 } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
+import Avatar from 'boring-avatars';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUser } from '../reducers/userReducer';
@@ -136,6 +137,7 @@ function Userprofile() {
       ) : (
         <>
           <Text>{email}</Text>
+          <Avatar variant='ring' size={160} name={username}  />
           <Text>{username}</Text>
         </>
       )}
