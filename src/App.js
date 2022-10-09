@@ -4,6 +4,7 @@ import {
   Container,
   Group,
   Header,
+  Menu,
   PasswordInput,
   TextInput,
   Title,
@@ -20,6 +21,7 @@ import { setInitialReports } from './reducers/reportReducer';
 import { setInitialPublicReports } from './reducers/publicReportReducer';
 import Userprofile from './components/Userprofile';
 import { setUser } from './reducers/userReducer';
+import Avatar from 'boring-avatars';
 
 function App() {
   const navigate = useNavigate();
@@ -142,6 +144,9 @@ function App() {
   };
 
   const LoginButton = () => {
+
+    const [isMenuOpen, setIsMenuOpen] = useState(false)
+
     const handleSignout = async () => {
       try {
         await signOut();
@@ -155,7 +160,16 @@ function App() {
         <Button>Login</Button>
       </Link>
     ) : (
-      <Button onClick={handleSignout}>Logout</Button>
+      <Menu opened={isMenuOpen}>
+        <Menu.Target>
+          <Avatar onClick={()=>setIsMenuOpen(true)} />
+        </Menu.Target>
+        <Menu.Dropdown>
+          <Menu.Item>
+            <Button onClick={handleSignout}>Logout</Button>
+          </Menu.Item>
+        </Menu.Dropdown>
+      </Menu>
     );
   };
   const MainHeader = () => {
