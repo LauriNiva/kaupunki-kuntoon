@@ -45,7 +45,7 @@ function Mapview() {
     if (!map) return;
 
     L.easyButton(
-      `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-focus-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-focus-2" width="16" height="16" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
    <circle cx="12" cy="12" r=".5" fill="currentColor"></circle>
    <circle cx="12" cy="12" r="7"></circle>
@@ -145,15 +145,17 @@ function Mapview() {
   const BottomButtons = () => {
     return (
       <Group position="right" className="map-bottom-buttons">
-        <Button
-          onClick={() => {
-            map.locate().on('locationfound', function (e) {
-              map.flyTo(e.latlng, map.getZoom());
-            });
-          }}
-        >
-          Locate
-        </Button>
+        <Tooltip label="Paikanna">
+          <Button
+            onClick={() => {
+              map.locate().on('locationfound', function (e) {
+                map.flyTo(e.latlng, map.getZoom());
+              });
+            }}
+          >
+            <IconFocus2 />
+          </Button>
+        </Tooltip>
         <Link to="/new">
           <Tooltip label="Lisää uusi raportti">
             <Button color="teal.5">
