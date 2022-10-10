@@ -27,6 +27,13 @@ button a {
 
 }
 
+.map-bottom-buttons{
+  position: absolute;
+  z-index: 4;
+  bottom: 30px;
+  right: 10px;
+}
+
 .report-popup {
   width: 400px;
 }

@@ -1,8 +1,18 @@
-import { Checkbox, Container, Group, Image, Title } from '@mantine/core';
-import React, { useState } from 'react';
+import {
+  Button,
+  Checkbox,
+  Container,
+  Group,
+  Image,
+  Tooltip,
+} from '@mantine/core';
+import React, { useEffect, useState } from 'react';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import { useSelector } from 'react-redux';
-import * as L from 'leaflet';
+import L from 'leaflet';
+import 'leaflet-easybutton';
+import { Link } from 'react-router-dom';
+import { IconCirclePlus, IconFocus2 } from '@tabler/icons';
 
 function Mapview() {
   const [map, setMap] = useState(null);
@@ -12,8 +22,9 @@ function Mapview() {
 
   const reports = useSelector((state) => state.reports);
   const publicReports = useSelector((state) => state.publicReports);
-  const publicReportsToShow = publicReports.filter((report) => report.user_id !== user.id);
-
+  const publicReportsToShow = publicReports.filter(
+    (report) => report.user_id !== user.id
+  );
 
   const [showOwnReports, setShowOwnReports] = useState(true);
   const [showPublicReports, setShowPublicReports] = useState(true);
@@ -24,10 +35,32 @@ function Mapview() {
   const reportsToShow = () => {
     let reportsToReturn = [];
     if (showOwnReports) reportsToReturn = reportsToReturn.concat(reports);
-    if (showPublicReports) reportsToReturn = reportsToReturn.concat(publicReportsToShow);
+    if (showPublicReports)
+      reportsToReturn = reportsToReturn.concat(publicReportsToShow);
 
     return reportsToReturn;
   };
+
+  useEffect(() => {
+    if (!map) return;
+
+    L.easyButton(
+      `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-focus-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+   <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+   <circle cx="12" cy="12" r=".5" fill="currentColor"></circle>
+   <circle cx="12" cy="12" r="7"></circle>
+   <line x1="12" y1="3" x2="12" y2="5"></line>
+   <line x1="3" y1="12" x2="5" y2="12"></line>
+   <line x1="12" y1="19" x2="12" y2="21"></line>
+   <line x1="19" y1="12" x2="21" y2="12"></line>
+</svg>`,
+      function (btn, map) {
+        map.locate().on('locationfound', function (e) {
+          map.flyTo(e.latlng, map.getZoom());
+        });
+      }
+    ).addTo(map);
+  }, [map]);
 
   const generateCustomMarker = (myCustomColour) => {
     const markerHtmlStyles = `
@@ -109,9 +142,33 @@ function Mapview() {
     );
   };
 
+  const BottomButtons = () => {
+    return (
+      <Group position="right" className="map-bottom-buttons">
+        <Button
+          onClick={() => {
+            map.locate().on('locationfound', function (e) {
+              map.flyTo(e.latlng, map.getZoom());
+            });
+          }}
+        >
+          Locate
+        </Button>
+        <Link to="/new">
+          <Tooltip label="Lisää uusi raportti">
+            <Button color="teal.5">
+              <IconCirclePlus />
+            </Button>
+          </Tooltip>
+        </Link>
+      </Group>
+    );
+  };
+
   return (
     <>
       <FiltersPanel />
+      <BottomButtons />
       <MapContainer
         center={[64.07391245239761, 24.53362472782081]}
         zoom={20}
@@ -120,7 +177,7 @@ function Mapview() {
         ref={setMap}
       >
         <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         {/* <span className="crosshair">+</span> */}
