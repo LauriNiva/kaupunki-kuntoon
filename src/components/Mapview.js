@@ -84,17 +84,37 @@ function Mapview() {
     });
   };
 
+  const ReportPopup = ({report}) => {
+    console.log('first', report);
+    return (
+      <Container>
+        {report.description}
+        {!report.images ? (
+          <Image
+            src={
+              'https://yeopeoovpnhcjzmqilyz.supabase.co/storage/v1/object/public/kaupunki-images/default.jpg'
+            }
+          />
+        ) : (
+          <Image
+            src={`https://yeopeoovpnhcjzmqilyz.supabase.co/storage/v1/object/public/kaupunki-images/${report.images}`}
+          />
+        )}
+      </Container>
+    );
+  }
+
   const generateMarkers = () => {
-    return reportsToShow().map((location) => {
+    return reportsToShow().map((report) => {
       const icon =
-        location.user_id === user?.id
+        report.user_id === user?.id
           ? generateCustomMarker(ownMarkerColor)
           : generateCustomMarker(publicMarkerColor);
       return (
         <Marker
           icon={icon}
-          key={location.id}
-          position={[location.lat, location.long]}
+          key={report.id}
+          position={[report.lat, report.long]}
           eventHandlers={{
             click: (e) => {
               map.setView([e.latlng.lat, e.latlng.lng]);
@@ -102,18 +122,7 @@ function Mapview() {
           }}
         >
           <Popup autoPan={false} className="report-popup">
-            {location.description}
-            {!location.images ? (
-              <Image
-                src={
-                  'https://yeopeoovpnhcjzmqilyz.supabase.co/storage/v1/object/public/kaupunki-images/default.jpg'
-                }
-              />
-            ) : (
-              <Image
-                src={`https://yeopeoovpnhcjzmqilyz.supabase.co/storage/v1/object/public/kaupunki-images/${location.images}`}
-              />
-            )}
+            <ReportPopup report={report} />
           </Popup>
         </Marker>
       );
