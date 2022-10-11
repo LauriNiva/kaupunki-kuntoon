@@ -1,9 +1,13 @@
 import {
+  Badge,
   Button,
+  Card,
   Checkbox,
+  CloseButton,
   Container,
   Group,
   Image,
+  Text,
   Tooltip,
 } from '@mantine/core';
 import React, { useEffect, useState } from 'react';
@@ -41,26 +45,26 @@ function Mapview() {
     return reportsToReturn;
   };
 
-  useEffect(() => {
-    if (!map) return;
+//   useEffect(() => {
+//     if (!map) return;
 
-    L.easyButton(
-      `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-focus-2" width="16" height="16" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-   <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-   <circle cx="12" cy="12" r=".5" fill="currentColor"></circle>
-   <circle cx="12" cy="12" r="7"></circle>
-   <line x1="12" y1="3" x2="12" y2="5"></line>
-   <line x1="3" y1="12" x2="5" y2="12"></line>
-   <line x1="12" y1="19" x2="12" y2="21"></line>
-   <line x1="19" y1="12" x2="21" y2="12"></line>
-</svg>`,
-      function (btn, map) {
-        map.locate().on('locationfound', function (e) {
-          map.flyTo(e.latlng, map.getZoom());
-        });
-      }
-    ).addTo(map);
-  }, [map]);
+//     L.easyButton(
+//       `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-focus-2" width="16" height="16" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+//    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+//    <circle cx="12" cy="12" r=".5" fill="currentColor"></circle>
+//    <circle cx="12" cy="12" r="7"></circle>
+//    <line x1="12" y1="3" x2="12" y2="5"></line>
+//    <line x1="3" y1="12" x2="5" y2="12"></line>
+//    <line x1="12" y1="19" x2="12" y2="21"></line>
+//    <line x1="19" y1="12" x2="21" y2="12"></line>
+// </svg>`,
+//       function (btn, map) {
+//         map.locate().on('locationfound', function (e) {
+//           map.flyTo(e.latlng, map.getZoom());
+//         });
+//       }
+//     ).addTo(map);
+//   }, [map]);
 
   const generateCustomMarker = (myCustomColour) => {
     const markerHtmlStyles = `
@@ -86,20 +90,34 @@ function Mapview() {
 
   const ReportPopup = ({report}) => {
     return (
-      <Container>
+      <Card shadow='sm' radius="md" className="report-popup-container">
+        <Card.Section>
+          <CloseButton
+            size='lg'
+            variant='filled'
+           className='popup-close-button' onClick={() => map.closePopup()} />
+          {!report.images ? (
+            <Image
+              src={
+                'https://yeopeoovpnhcjzmqilyz.supabase.co/storage/v1/object/public/kaupunki-images/default.jpg'
+              }
+            />
+          ) : (
+            <Image
+              height={250}
+              src={`https://yeopeoovpnhcjzmqilyz.supabase.co/storage/v1/object/public/kaupunki-images/${report.images}`}
+            />
+          )}
+        </Card.Section>
+        <Group mt='sm' mb='sm'>
+          <Badge>{report.status}</Badge>
+        </Group>
+        <Text>
         {report.description}
-        {!report.images ? (
-          <Image
-            src={
-              'https://yeopeoovpnhcjzmqilyz.supabase.co/storage/v1/object/public/kaupunki-images/default.jpg'
-            }
-          />
-        ) : (
-          <Image
-            src={`https://yeopeoovpnhcjzmqilyz.supabase.co/storage/v1/object/public/kaupunki-images/${report.images}`}
-          />
-        )}
-      </Container>
+
+        </Text>
+        <Button mt={'md'} fullWidth>Avaa raportti</Button>
+      </Card>
     );
   }
 
@@ -122,7 +140,7 @@ function Mapview() {
             },
           }}
         >
-          <Popup autoPan={false} className="report-popup">
+          <Popup closeButton={false} autoPan={false} maxWidth={400} className="report-popup">
             <ReportPopup report={report} />
           </Popup>
         </Marker>

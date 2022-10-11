@@ -36,6 +36,26 @@ button a {
 
 .report-popup {
   width: 400px;
+  max-width: 95vw;
+}
+.report-popup-container {
+ width:100%;
+ margin: 0;
+}
+.leaflet-popup-content-wrapper{
+  padding: 0;
+}
+
+.leaflet-popup-content {
+  margin: 0;
+  width: 100%;
+}
+
+.popup-close-button {
+  opacity: 0.9;
+  position: absolute;
+  right: 0;
+  z-index: 1;
 }
 
 .form-map {
