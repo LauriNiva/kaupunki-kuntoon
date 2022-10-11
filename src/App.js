@@ -13,6 +13,7 @@ import { setUser } from './reducers/userReducer';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import MainHeader from './components/MainHeader';
+import Report from './components/Report';
 
 function App() {
   const navigate = useNavigate();
@@ -82,6 +83,7 @@ function App() {
           <Route path="/userprofile" element={<Userprofile />} />
           <Route path="/own" element={<OwnReports />} />
           <Route path="/new" element={<NewReportForm />} />
+          <Route path="/reports/:id" element={<Report />} />
           <Route path="/" element={<Mapview />} />
         </Routes>
       </AppShell>

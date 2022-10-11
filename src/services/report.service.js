@@ -9,6 +9,13 @@ export const getPublicReports = async () => {
   if (data) return data;
 };
 
+export const getSingleReport = async (id) => {
+  const { data, error } = await supabase.from('reports').select().eq('id', id).single();
+  if (error) console.log(error);
+
+  if (data) return data;
+};
+
 export const getOwnReports = async (userid) => {
   const { data, error } = await supabase
     .from('reports')
