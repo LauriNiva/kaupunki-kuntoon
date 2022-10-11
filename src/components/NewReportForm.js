@@ -8,10 +8,11 @@ import {
   Modal,
   Textarea,
   Loader,
+  Tooltip,
 } from '@mantine/core';
 import { useState } from 'react';
 import { MapContainer, Marker, TileLayer } from 'react-leaflet';
-import { IconPhoto } from '@tabler/icons';
+import { IconFocus2, IconPhoto } from '@tabler/icons';
 import { addReport, uploadImage } from '../services/report.service';
 import Compressor from 'compressorjs';
 import { useNavigate } from 'react-router-dom';
@@ -47,37 +48,37 @@ function NewReportForm() {
 
   const handleSubmit = async (values) => {
     setIsLoading(true);
-      new Compressor(imagePreview, {
-        quality: 0.6,
-        maxHeight: 2000,
-        maxWidth: 2000,
-        success(result) {
-          uploadImage(result).then((uploadedImage) => {
-            if (uploadedImage) {
-              const newReport = {
-                lat: chosenLocation[0],
-                long: chosenLocation[1],
-                description: values.kuvaus,
-                images: uploadedImage,
-              };
-              addReport(newReport).then((addedReport) => {
-                showNotification({
-                  title: 'Uusi raportti',
-                  message: 'Raportti lisätty!',
-                  autoClose: 5000,
-                });
-                console.log('addedReport', addedReport);
-                dispatch(concatNewReport(addedReport));
-                setIsLoading(false);
-                navigate('/');
+    new Compressor(imagePreview, {
+      quality: 0.6,
+      maxHeight: 2000,
+      maxWidth: 2000,
+      success(result) {
+        uploadImage(result).then((uploadedImage) => {
+          if (uploadedImage) {
+            const newReport = {
+              lat: chosenLocation[0],
+              long: chosenLocation[1],
+              description: values.kuvaus,
+              images: uploadedImage,
+            };
+            addReport(newReport).then((addedReport) => {
+              showNotification({
+                title: 'Uusi raportti',
+                message: 'Raportti lisätty!',
+                autoClose: 5000,
               });
-            }
-          });
-        },
-        error(error) {
-          console.log('Error compressing image:', error);
-        },
-      });
+              console.log('addedReport', addedReport);
+              dispatch(concatNewReport(addedReport));
+              setIsLoading(false);
+              navigate('/');
+            });
+          }
+        });
+      },
+      error(error) {
+        console.log('Error compressing image:', error);
+      },
+    });
   };
 
   return (
@@ -155,7 +156,18 @@ function NewReportForm() {
           />
           <span className="crosshair">+</span>
         </MapContainer>
-        <Group position="right">
+        <Group position="apart">
+          <Tooltip label="Paikanna">
+            <Button
+              onClick={() => {
+                formMap.locate().on('locationfound', function (e) {
+                  formMap.flyTo(e.latlng, formMap.getZoom());
+                });
+              }}
+            >
+              <IconFocus2 />
+            </Button>
+          </Tooltip>
           <Button onClick={updateLocation}>Lisää</Button>
         </Group>
       </Modal>
