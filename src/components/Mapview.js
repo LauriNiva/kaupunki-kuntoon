@@ -85,7 +85,6 @@ function Mapview() {
   };
 
   const ReportPopup = ({report}) => {
-    console.log('first', report);
     return (
       <Container>
         {report.description}
@@ -117,7 +116,9 @@ function Mapview() {
           position={[report.lat, report.long]}
           eventHandlers={{
             click: (e) => {
-              map.setView([e.latlng.lat, e.latlng.lng]);
+              const bounds = map.getBounds();
+              const mapheight = bounds._northEast.lat - bounds._southWest.lat;
+              map.setView([e.latlng.lat + (mapheight / 3), e.latlng.lng]);
             },
           }}
         >
