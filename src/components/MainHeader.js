@@ -66,9 +66,11 @@ function MainHeader() {
       >
         <Group>
           <MediaQuery smallerThan="xs" styles={{ fontSize: '1.2rem' }}>
+            <Link to='/'>
             <Title color="teal.4" order={1}>
               Kaupunki kuntoon
             </Title>
+            </Link>
           </MediaQuery>
         </Group>
         <Group>
