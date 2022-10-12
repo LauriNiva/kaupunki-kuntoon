@@ -21,14 +21,13 @@ import { IconCirclePlus, IconFocus2 } from '@tabler/icons';
 function Mapview() {
   const [map, setMap] = useState(null);
 
-
   const session = useSelector((state) => state.sessions);
-  const user = session?.user;
+  const user = useSelector((state) => state.users);
 
   const reports = useSelector((state) => state.reports);
   const publicReports = useSelector((state) => state.publicReports);
   const publicReportsToShow = publicReports.filter(
-    (report) => report.user_id !== user.id
+    (report) => report.user_id !== user?.id
   );
 
   const [showOwnReports, setShowOwnReports] = useState(true);
@@ -39,7 +38,9 @@ function Mapview() {
 
   const reportsToShow = () => {
     let reportsToReturn = [];
-    if (showOwnReports) reportsToReturn = reportsToReturn.concat(reports);
+    if (user) {
+      if (showOwnReports) reportsToReturn = reportsToReturn.concat(reports);
+    }
     if (showPublicReports)
       reportsToReturn = reportsToReturn.concat(publicReportsToShow);
 
@@ -161,13 +162,15 @@ function Mapview() {
     return (
       <Group position={'right'}>
         <Container className="map-filter-panel" p={'md'}>
-          <Checkbox
-            checked={showOwnReports}
-            onChange={() => setShowOwnReports(!showOwnReports)}
-            color={'violet.6'}
-            label="Omat"
-            mb={'xs'}
-          />
+          {user && (
+            <Checkbox
+              checked={showOwnReports}
+              onChange={() => setShowOwnReports(!showOwnReports)}
+              color={'violet.6'}
+              label="Omat"
+              mb={'xs'}
+            />
+          )}
           <Checkbox
             checked={showPublicReports}
             onChange={() => setShowPublicReports(!showPublicReports)}
@@ -181,7 +184,20 @@ function Mapview() {
 
   const BottomButtons = () => {
     return (
-      <Group position="right" className="map-bottom-buttons">
+      <Group
+        sx={{ flexDirection: 'column' }}
+        position="right"
+        className="map-bottom-buttons"
+      >
+        {session && (
+          <Link to="/new">
+            <Tooltip label="Lisää uusi raportti">
+              <Button color="teal.5">
+                <IconCirclePlus />
+              </Button>
+            </Tooltip>
+          </Link>
+        )}
         <Tooltip label="Paikanna">
           <Button
             onClick={() => {
@@ -193,13 +209,6 @@ function Mapview() {
             <IconFocus2 />
           </Button>
         </Tooltip>
-        <Link to="/new">
-          <Tooltip label="Lisää uusi raportti">
-            <Button color="teal.5">
-              <IconCirclePlus />
-            </Button>
-          </Tooltip>
-        </Link>
       </Group>
     );
   };

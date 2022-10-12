@@ -18,7 +18,8 @@ import { supabase } from '../supabaseClient';
 
 function Userprofile() {
   const dispatch = useDispatch();
-  const username = useSelector((state) => state.users);
+  const user = useSelector((state) => state.users);
+  const username = user?.username;
   const [avatar, setAvatar] = useState(null);
 
   const [isLoading, setIsLoading] = useState(true);
@@ -42,7 +43,7 @@ function Userprofile() {
         console.log('error fetching profile', error);
       }
       if (data) {
-        dispatch(setUser(data.username));
+        dispatch(setUser(data));
         setAvatar(data.avatar);
         setIsLoading(false);
       }else {
@@ -78,7 +79,7 @@ function Userprofile() {
 
       if (data) {
         console.log(data);
-        dispatch(setUser(data[0]?.username));
+        dispatch(setUser(data[0]));
         setIsLoading(false);
         showNotification({
           title: 'Käyttäjänimi luotu!',

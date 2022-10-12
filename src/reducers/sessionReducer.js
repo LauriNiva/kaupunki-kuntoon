@@ -33,7 +33,6 @@ export const loginUser = (email, password) => {
 export const signoutUser = () => {
   return async (dispatch) => {
     await signOut();
-    dispatch(removeSession);
   };
 };
 

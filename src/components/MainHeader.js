@@ -13,19 +13,21 @@ import { IconLogout, IconMap2, IconUserCircle } from '@tabler/icons';
 import Avatar from 'boring-avatars';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { signOut } from '../services/auth.service';
 
 function MainHeader() {
   const session = useSelector((state) => state.sessions);
-  const username = useSelector((state) => state.users);
+  const user = useSelector((state) => state.users);
+  const username = user?.username;
 
-  const loggedinUser = session?.user;
+  const navigate = useNavigate();
 
   const MenuButton = () => {
     const handleSignout = async () => {
       try {
         await signOut();
+        navigate('/');
       } catch (error) {
         console.log(error);
       }
@@ -66,10 +68,10 @@ function MainHeader() {
       >
         <Group>
           <MediaQuery smallerThan="xs" styles={{ fontSize: '1.2rem' }}>
-            <Link to='/'>
-            <Title color="teal.4" order={1}>
-              Kaupunki kuntoon
-            </Title>
+            <Link to="/">
+              <Title color="teal.4" order={1}>
+                Kaupunki kuntoon
+              </Title>
             </Link>
           </MediaQuery>
         </Group>
@@ -79,7 +81,7 @@ function MainHeader() {
               <IconMap2 />
             </Button>
           </Link>
-          {loggedinUser ? (
+          {session ? (
             <>
               {/* <Link to="/new">
                 <Button color="teal.5"><IconCirclePlus /></Button>

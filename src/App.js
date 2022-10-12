@@ -39,19 +39,20 @@ function App() {
     const checkUsername = async () => {
       try {
         const userid = session?.user.id;
-        console.log('userid', userid);
         if (userid) {
           const { data, error, status } = await supabase
             .from('profiles')
-            .select('username')
+            .select()
             .eq('id', userid)
             .single();
           if (data) {
-            console.log('data with username', data);
-            dispatch(setUser(data.username));
+            dispatch(setUser(data));
           } else {
             navigate('/userprofile');
           }
+        } else {
+            dispatch(setUser(null));
+
         }
       } catch (error) {
         console.log('error while checking username', error);

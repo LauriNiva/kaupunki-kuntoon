@@ -21,6 +21,9 @@ export const setInitialReports = (userid) => {
     if (userid) {
       const reports = await getOwnReports(userid);
       dispatch(setReports(reports));
+    } else {
+      dispatch(setReports([]));
+
     }
   };
 };
