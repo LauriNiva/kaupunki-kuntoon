@@ -14,12 +14,14 @@ import Login from './components/Login';
 import Signup from './components/Signup';
 import MainHeader from './components/MainHeader';
 import Report from './components/Report';
+import WorkMain from './components/WorkMain';
 
 function App() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const session = useSelector((state) => state.sessions);
+  const user = useSelector((state) => state.users);
 
   useEffect(() => {
     const getSession = async () => {
@@ -85,6 +87,7 @@ function App() {
           <Route path="/own" element={<OwnReports />} />
           <Route path="/new" element={<NewReportForm />} />
           <Route path="/reports/:id" element={<Report />} />
+          <Route path="/work" element={<WorkMain />} />
           <Route path="/" element={<Mapview />} />
         </Routes>
       </AppShell>

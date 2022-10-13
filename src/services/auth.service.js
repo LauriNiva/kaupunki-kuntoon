@@ -16,11 +16,15 @@ export const signInWithEmailAndPassword = async (email, password) => {
 
 }
 
-export const signUpNewUser = async (email, username, password) => {
+export const signUpNewUser = async (email, password) => {
+  console.log(password);
   const { user, session, error } = await supabase.auth.signUp({
     email,
     password,
   });
+  console.log(user)
+  console.log(session);
+  console.log(error);
 }
 
 export const signOut = async () => {

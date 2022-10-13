@@ -9,7 +9,7 @@ import {
   UnstyledButton,
   MediaQuery,
 } from '@mantine/core';
-import { IconLogout, IconMap2, IconUserCircle } from '@tabler/icons';
+import { IconLogout, IconMap2, IconTools, IconUserCircle } from '@tabler/icons';
 import Avatar from 'boring-avatars';
 import React from 'react';
 import { useSelector } from 'react-redux';
@@ -19,6 +19,7 @@ import { signOut } from '../services/auth.service';
 function MainHeader() {
   const session = useSelector((state) => state.sessions);
   const user = useSelector((state) => state.users);
+  const isEmployee = user?.role === 'employee';
   const username = user?.username;
 
   const navigate = useNavigate();
@@ -67,15 +68,22 @@ function MainHeader() {
         }}
       >
         <Group>
-          <MediaQuery smallerThan="xs" styles={{ fontSize: '1.2rem' }}>
             <Link to="/">
+          <MediaQuery smallerThan="xs" styles={{ fontSize: '1.2rem' }}>
               <Title color="teal.4" order={1}>
                 Kaupunki kuntoon
               </Title>
-            </Link>
           </MediaQuery>
+            </Link>
         </Group>
         <Group>
+          {isEmployee && (
+            <Link to="/work">
+              <Button color="orange.6">
+                <IconTools />
+              </Button>
+            </Link>
+          )}
           <Link to="/">
             <Button color="teal.5">
               <IconMap2 />
