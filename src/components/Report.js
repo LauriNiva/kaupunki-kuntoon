@@ -1,7 +1,5 @@
 import {
-  ActionIcon,
   Badge,
-  Box,
   Center,
   CloseButton,
   Container,
@@ -12,7 +10,6 @@ import {
   Stepper,
   Text,
 } from '@mantine/core';
-import { IconArrowsMaximize } from '@tabler/icons';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
