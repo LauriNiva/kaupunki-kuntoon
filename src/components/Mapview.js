@@ -39,10 +39,14 @@ function Mapview() {
   const reportsToShow = () => {
     let reportsToReturn = [];
     if (user) {
-      if (showOwnReports) reportsToReturn = reportsToReturn.concat(reports);
+      if (showOwnReports) {
+        reportsToReturn = reportsToReturn.concat(reports);
+      }
     }
-    if (showPublicReports)
+
+    if (showPublicReports) {
       reportsToReturn = reportsToReturn.concat(publicReportsToShow);
+    }
 
     return reportsToReturn;
   };
