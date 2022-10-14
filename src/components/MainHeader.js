@@ -38,7 +38,7 @@ function MainHeader() {
       <Menu className="top-menu">
         <Menu.Target>
           <UnstyledButton>
-            {username ? <Avatar variant="ring" name={username} /> : <Loader />}
+            {username ? <Avatar variant="marble" name={username} /> : <Loader />}
           </UnstyledButton>
         </Menu.Target>
         <Menu.Dropdown>
