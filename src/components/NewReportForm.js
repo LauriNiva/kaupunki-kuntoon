@@ -9,6 +9,8 @@ import {
   Textarea,
   Loader,
   Tooltip,
+  Paper,
+  Title,
 } from '@mantine/core';
 import { useState } from 'react';
 import { MapContainer, Marker, TileLayer } from 'react-leaflet';
@@ -82,36 +84,42 @@ function NewReportForm() {
   };
 
   return (
-    <Container>
+    <Container mt="lg" size={500}>
+      <Title align="center" order={2}>
+        Uusi raportti
+      </Title>
       <form onSubmit={form.onSubmit(handleSubmit)}>
-        <Textarea
-          required
-          label="Kuvaus"
-          placeholder="Kuvaa ongelma yms"
-          minRows={3}
-          maxRows={6}
-          {...form.getInputProps('kuvaus')}
-        />
-        <Group mt={'sm'} noWrap align={'start'}>
-          <FileInput
-            {...form.getInputProps('kuva')}
-            onChange={setImagePreview}
-            value={imagePreview}
-            accept="image/png,image/jpeg"
-            label="Kuva"
-            placeholder="Lisää kuva"
-            icon={<IconPhoto size={26} />}
+        <Paper mt={'xl'} shadow="sm" withBorder p={'xl'}>
+          <Textarea
+            required
+            label="Kuvaus"
+            placeholder="Kuvaa ongelma yms"
+            minRows={3}
+            maxRows={6}
+            {...form.getInputProps('kuvaus')}
           />
-          {imagePreview && (
-            <Image
-              height={'30vh'}
-              m={'md'}
-              src={URL.createObjectURL(imagePreview)}
+        </Paper>
+        <Paper mt={'xl'} shadow="sm" withBorder p={'xl'}>
+          <Group noWrap align={'start'}>
+            <FileInput
+              {...form.getInputProps('kuva')}
+              onChange={setImagePreview}
+              value={imagePreview}
+              accept="image/png,image/jpeg"
+              label="Kuva"
+              placeholder="Lisää kuva"
+              icon={<IconPhoto size={26} />}
             />
-          )}
-        </Group>
-
-        <Group mt={'sm'}>
+            {imagePreview && (
+              <Image
+                height={'30vh'}
+                m={'md'}
+                src={URL.createObjectURL(imagePreview)}
+              />
+            )}
+          </Group>
+        </Paper>
+        <Paper mt={'xl'} shadow="sm" withBorder p={'xl'}>
           <MapContainer
             center={[64.07391245239761, 24.53362472782081]}
             zoom={20}
@@ -128,12 +136,12 @@ function NewReportForm() {
               className="minimap-button"
               onClick={() => setMapModalOpen(true)}
             >
-              {!chosenLocation ? 'Lisää sijainti' : 'Muuta sijaintia'}
+              {!chosenLocation ? 'Määritä sijainti' : 'Muuta sijaintia'}
             </Button>
           </MapContainer>
-        </Group>
+        </Paper>
         <Group mt={'md'} position="right">
-          {isLoading ? <Loader /> : <Button type="submit">Lisää</Button>}
+          {isLoading ? <Loader /> : <Button fullWidth type="submit">Lisää</Button>}
         </Group>
       </form>
       <Modal
