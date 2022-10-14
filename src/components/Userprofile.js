@@ -22,38 +22,42 @@ function Userprofile() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.users);
   const username = user?.username;
-  const [avatar, setAvatar] = useState(null);
+  // const [avatar, setAvatar] = useState(null);
+
+  console.log(user);
 
   const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (username) setIsLoading(false);
+  }, [username]);
 
   const [usernameInput, setUsernameInput] = useState('');
   const [usernameInputError, setUsernameInputError] = useState(null);
   const session = useSelector((state) => state.sessions);
   const email = session?.user.email;
 
-  useEffect(() => {
-    const getProfile = async () => {
-      const userid = session?.user.id;
+  // useEffect(() => {
+  //   const getProfile = async () => {
+  //     const userid = session?.user.id;
 
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('username', 'avatar')
-        .eq('id', userid)
-        .single();
+  //     const { data, error } = await supabase
+  //       .from('profiles')
+  //       .select()
+  //       .eq('id', userid)
+  //       .single();
 
-      if (error) {
-        console.log('error fetching profile', error);
-      }
-      if (data) {
-        dispatch(setUser(data));
-        setAvatar(data.avatar);
-        setIsLoading(false);
-      }else {
-        setIsLoading(false);
-      }
-    };
-    getProfile();
-  }, [session, dispatch]);
+  //     if (error) {
+  //       console.log('error fetching profile', error);
+  //     }
+  //     if (data) {
+  //       dispatch(setUser(data));
+  //       setAvatar(data.avatar);
+  //     }
+  //       setIsLoading(false);  
+  //   };
+  //   getProfile();
+  // }, [session, dispatch]);
 
   const AddUsername = () => {
     const handleUsernameSubmit = async () => {
