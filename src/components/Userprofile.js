@@ -1,10 +1,12 @@
 import {
   Button,
+  Center,
   Container,
   Group,
   List,
   Loader,
   Modal,
+  Paper,
   Text,
   TextInput,
   Title,
@@ -130,20 +132,26 @@ function Userprofile() {
   };
 
   return (
-    <Container>
-      <Title order={2}>Käyttäjätiedot</Title>
+    <Container mt="lg" size={500}>
+      <Title align="center" order={2}>
+        Käyttäjätiedot
+      </Title>
       <AddUsername />
-      {isLoading ? (
-        <Loader />
-      ) : (
-        <>
-          <Text>{email}</Text>
-          <Avatar variant='ring' size={160} name={username}  />
-          <Text>{username}</Text>
+      <Paper shadow="sm" withBorder p={'xl'}>
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <>
+            <Center>
 
-          TODO Salasanan vaihtaminen
-        </>
-      )}
+            <Avatar variant="marble" size={160} name={username} />
+            </Center>
+            <Text align='center' >{username}</Text>
+            <Text align='center'>{email}</Text>
+            ----TODO Salasanan vaihtaminen----
+          </>
+        )}
+      </Paper>
     </Container>
   );
 }
