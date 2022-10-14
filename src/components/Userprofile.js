@@ -24,8 +24,6 @@ function Userprofile() {
   const username = user?.username;
   // const [avatar, setAvatar] = useState(null);
 
-  console.log(user);
-
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
