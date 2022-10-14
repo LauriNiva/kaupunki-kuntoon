@@ -84,7 +84,7 @@ function NewReportForm() {
   };
 
   return (
-    <Container mt="lg" size={500}>
+    <Container my="lg" size={500}>
       <Title align="center" order={2}>
         Uusi raportti
       </Title>
@@ -122,8 +122,12 @@ function NewReportForm() {
         <Paper mt={'xl'} shadow="sm" withBorder p={'xl'}>
           <MapContainer
             center={[64.07391245239761, 24.53362472782081]}
-            zoom={20}
+            zoom={16}
+            doubleClickZoom={false}
+            boxZoom={false}
+            dragging={false}
             scrollWheelZoom={false}
+            zoomControl={false}
             className="form-map-small"
             ref={setSmallFormMap}
           >
@@ -140,8 +144,14 @@ function NewReportForm() {
             </Button>
           </MapContainer>
         </Paper>
-        <Group mt={'md'} position="right">
-          {isLoading ? <Loader /> : <Button fullWidth type="submit">Lisää</Button>}
+        <Group mt={'md'} position="center">
+          {isLoading ? (
+            <Loader />
+          ) : (
+            <Button disabled={!chosenLocation} fullWidth type="submit">
+              Lisää
+            </Button>
+          )}
         </Group>
       </form>
       <Modal
