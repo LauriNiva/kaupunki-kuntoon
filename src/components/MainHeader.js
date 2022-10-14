@@ -60,6 +60,7 @@ function MainHeader() {
   return (
     <Header sx={{ backgroundColor: '#364FC7' }} height={50} p="0">
       <Container
+        fluid
         sx={{
           display: 'flex',
           justifyContent: 'space-between',
@@ -68,13 +69,13 @@ function MainHeader() {
         }}
       >
         <Group>
-            <Link to="/">
-          <MediaQuery smallerThan="xs" styles={{ fontSize: '1.2rem' }}>
+          <Link to="/">
+            <MediaQuery smallerThan="xs" styles={{ fontSize: '1.2rem' }}>
               <Title color="teal.4" order={1}>
                 Kaupunki kuntoon
               </Title>
-          </MediaQuery>
-            </Link>
+            </MediaQuery>
+          </Link>
         </Group>
         <Group>
           {isEmployee && (
