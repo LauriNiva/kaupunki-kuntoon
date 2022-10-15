@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { getOwnReports } from '../services/report.service';
+import { getAllReports, getGroupReports, getOwnReports } from '../services/report.service';
 
 const reportSlice = createSlice({
   name: 'report',
@@ -16,14 +16,20 @@ const reportSlice = createSlice({
 
 export const { setReports, concatNewReport } = reportSlice.actions;
 
-export const setInitialReports = (userid) => {
+export const setInitialReports = (user) => {
   return async (dispatch) => {
-    if (userid) {
-      const reports = await getOwnReports(userid);
+    if (user) {
+      let reports;
+      if (user.role === 'user') {
+        reports = await getOwnReports(user.id);
+      } else if (user.role === 'employee'){
+        reports = await getGroupReports(user.id);
+      } else if (user.role === 'operator'){
+        reports = await getAllReports(user.id);
+      }
       dispatch(setReports(reports));
     } else {
       dispatch(setReports([]));
-
     }
   };
 };

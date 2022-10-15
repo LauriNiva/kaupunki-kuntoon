@@ -26,9 +26,9 @@ function Mapview() {
 
   const reports = useSelector((state) => state.reports);
   const publicReports = useSelector((state) => state.publicReports);
-  const publicReportsToShow = publicReports.filter(
+  const publicReportsToShow = user?.role === 'user' ? publicReports.filter(
     (report) => report.user_id !== user?.id
-  );
+  ) : [];
 
   const [showOwnReports, setShowOwnReports] = useState(true);
   const [showPublicReports, setShowPublicReports] = useState(true);

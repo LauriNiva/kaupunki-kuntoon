@@ -53,8 +53,7 @@ function App() {
             navigate('/userprofile');
           }
         } else {
-            dispatch(setUser(null));
-
+          dispatch(setUser(null));
         }
       } catch (error) {
         console.log('error while checking username', error);
@@ -66,8 +65,11 @@ function App() {
 
   useEffect(() => {
     dispatch(setInitialPublicReports());
-    dispatch(setInitialReports(session?.user.id));
   }, [session, dispatch]);
+
+  useEffect(() => {
+    dispatch(setInitialReports(user));
+  }, [user, dispatch]);
 
   const OwnReports = () => {
     return (

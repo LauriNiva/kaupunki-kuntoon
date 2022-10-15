@@ -95,7 +95,7 @@ function Userprofile() {
 
     return (
       <Modal
-        opened={!username && !isLoading}
+        opened={!username}
         centered
         overlayOpacity={0.85}
         closeOnEscape={false}
