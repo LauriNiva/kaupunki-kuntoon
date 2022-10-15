@@ -2,7 +2,7 @@ import { supabase } from '../supabaseClient';
 import { v4 as uuidv4 } from 'uuid';
 
 export const getPublicReports = async () => {
-  const { data, error } = await supabase.from('reports').select();
+  const { data, error } = await supabase.from('reports').select().eq('public', true);
 
   if (error) console.log(error);
 
@@ -23,6 +23,25 @@ export const getOwnReports = async (userid) => {
     .eq('user_id', userid);
 
   if (error) console.log('getOwnReports error:', error);
+
+  if (data) return data;
+};
+export const getGroupReports = async (userid) => {
+  const { data, error } = await supabase
+    .from('reports')
+    .select()
+    .eq('user_id', userid);
+
+  if (error) console.log('getGroupReports error:', error);
+
+  if (data) return data;
+};
+export const getAllReports = async (userid) => {
+  const { data, error } = await supabase
+    .from('reports')
+    .select();
+
+  if (error) console.log('getAllReports error:', error);
 
   if (data) return data;
 };
