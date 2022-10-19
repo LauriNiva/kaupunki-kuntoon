@@ -26,9 +26,9 @@ function OperatorAllReports() {
     if (publicFilter < 3) {
       setPublicFilter(publicFilter + 1);
     } else {
-      setPublicFilter(1)
+      setPublicFilter(1);
     }
-  }
+  };
 
   const reportsToShow = reports.filter((report) => {
     if (publicFilter === 1) {
@@ -51,11 +51,7 @@ function OperatorAllReports() {
           </Tooltip>
           {/* options jos halutaan kellonaika {year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit'} */}
         </td>
-        <td className="table-description-cell">
-          <Container m={0} p={0} size="20vw">
-            {report.description}
-          </Container>
-        </td>
+        <td className="table-description-cell">{report.description}</td>
         <td>{report.status}</td>
         <td>{report.department}</td>
         <td>{report.public ? <IconEye /> : <IconEyeOff />}</td>
@@ -68,14 +64,19 @@ function OperatorAllReports() {
       <Title align="center" order={2}>
         Kaikki raportit
       </Title>
-      <Table sx={{}} mt={'md'} highlightOnHover>
+      <Table sx={{ tableLayout: 'fixed' }} mt={'md'} highlightOnHover>
         <thead>
           <tr>
-            <th>Luotu</th>
-            <th>Raportti</th>
-            <th>status</th>
-            <th>department</th>
-            <th onClick={() => togglePublicFilter()}>{publicFilterStates[publicFilter]}</th>
+            <th style={{ width: '4rem' }}>Luotu</th>
+            <th style={{ width: '100%' }}>Raportti</th>
+            <th style={{ width: '3.5rem' }}>status</th>
+            <th style={{ width: '5rem' }}>department</th>
+            <th
+              style={{ width: '1.5rem' }}
+              onClick={() => togglePublicFilter()}
+            >
+              {publicFilterStates[publicFilter]}
+            </th>
           </tr>
         </thead>
         <tbody>{newReports()}</tbody>
