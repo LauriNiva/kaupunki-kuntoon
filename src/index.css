@@ -97,4 +97,7 @@ button a {
   overflow: hidden;
 }
 
+th {
+  background-color: rgb(59, 201, 219);
+}
 
