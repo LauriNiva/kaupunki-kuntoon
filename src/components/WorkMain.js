@@ -1,4 +1,5 @@
-import { Container, Table } from '@mantine/core';
+import { Container, Table, Text, Tooltip } from '@mantine/core';
+import { IconEye, IconEyeOff } from '@tabler/icons';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -16,23 +17,34 @@ function WorkMain() {
 
   const newReports = () => {
     return reports.map((report) => (
-      <tr key={report.id}>
-        <td>{report.created_at}</td>
-        <td>{report.description}</td>
+      <tr onClick={() => console.log(report)} key={report.id}>
+        <td>
+          <Tooltip label={new Date(report.created_at).toLocaleTimeString()}>
+            <Text>
+              {new Date(report.created_at).toLocaleDateString('fi-Fi')}
+            </Text>
+          </Tooltip>
+          {/* options jos halutaan kellonaika {year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit'} */}
+        </td>
+        <td className='table-description-cell'>
+          <Container m={0} p={0} size='20vw'>
+          {report.description}
+          </Container>
+          </td>
         <td>{report.status}</td>
         <td>{report.department}</td>
-        <td>{report.public ? 'TRUE' : 'false'}</td>
+        <td>{report.public ? <IconEye /> : <IconEyeOff />}</td>
       </tr>
     ));
   };
 
   return (
     <Container>
-      <Table>
+      <Table sx={{ }} mt={'md'} highlightOnHover>
         <thead>
           <tr>
-            <th>created_at</th>
-            <th>description</th>
+            <th>Luotu</th>
+            <th>Raportti</th>
             <th>status</th>
             <th>department</th>
             <th>public</th>

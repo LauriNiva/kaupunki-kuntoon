@@ -1,6 +1,5 @@
 body {
   margin: 0;
-  
 }
 a {
   text-decoration: none;
@@ -11,7 +10,7 @@ button a {
   color: inherit;
 }
 
-.top-menu-link{
+.top-menu-link {
   text-decoration: none;
 }
 
@@ -21,17 +20,16 @@ button a {
   z-index: 2;
 }
 
-.map-filter-panel{
+.map-filter-panel {
   position: absolute;
   top: 55px;
   right: 5px;
   z-index: 4;
   background-color: rgba(255, 255, 255, 0.675);
   border-radius: 5px;
-
 }
 
-.map-bottom-buttons{
+.map-bottom-buttons {
   position: absolute;
   z-index: 4;
   bottom: 30px;
@@ -43,10 +41,10 @@ button a {
   max-width: 95vw;
 }
 .report-popup-container {
- width:100%;
- margin: 0;
+  width: 100%;
+  margin: 0;
 }
-.leaflet-popup-content-wrapper{
+.leaflet-popup-content-wrapper {
   padding: 0;
 }
 
@@ -70,7 +68,6 @@ button a {
   width: 100%;
   height: 20vh;
   z-index: 3;
-
 }
 
 .minimap-button {
@@ -93,3 +90,11 @@ button a {
   align-items: center;
   font-weight: 200;
 }
+
+
+.table-description-cell {
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+
