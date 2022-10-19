@@ -20,6 +20,7 @@ function MainHeader() {
   const session = useSelector((state) => state.sessions);
   const user = useSelector((state) => state.users);
   const isEmployee = user?.role === 'employee' || 'operator';
+  const isOperator = user?.role === 'operator';
   const username = user?.username;
 
   const navigate = useNavigate();
@@ -78,6 +79,13 @@ function MainHeader() {
           </Link>
         </Group>
         <Group>
+          {isOperator && (
+            <Link to="/operator">
+              <Button color="cyan.4">
+                <IconTools />
+              </Button>
+            </Link>
+          )}
           {isEmployee && (
             <Link to="/work">
               <Button color="orange.6">

@@ -15,6 +15,7 @@ import Signup from './components/Signup';
 import MainHeader from './components/MainHeader';
 import Report from './components/Report';
 import WorkMain from './components/WorkMain';
+import OperatorAllReports from './components/OperatorAllReports';
 
 function App() {
   const navigate = useNavigate();
@@ -90,6 +91,8 @@ function App() {
           <Route path="/new" element={<NewReportForm />} />
           <Route path="/reports/:id" element={<Report />} />
           <Route path="/work" element={<WorkMain />} />
+          <Route path="/operator" element={<OperatorAllReports />} />
+
           <Route path="/" element={<Mapview />} />
         </Routes>
       </AppShell>
