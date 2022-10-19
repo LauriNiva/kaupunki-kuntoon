@@ -1,6 +1,6 @@
 import { Container, Table, Text, Title, Tooltip } from '@mantine/core';
 import { IconEye, IconEyeOff } from '@tabler/icons';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
@@ -15,8 +15,33 @@ function OperatorAllReports() {
     if (user?.role === 'user') navigate('/');
   }, [user, navigate]);
 
+  const publicFilterStates = {
+    1: <IconEye opacity={0.2} />,
+    2: <IconEye />,
+    3: <IconEyeOff />,
+  };
+  const [publicFilter, setPublicFilter] = useState(1);
+
+  const togglePublicFilter = () => {
+    if (publicFilter < 3) {
+      setPublicFilter(publicFilter + 1);
+    } else {
+      setPublicFilter(1)
+    }
+  }
+
+  const reportsToShow = reports.filter((report) => {
+    if (publicFilter === 1) {
+      return true;
+    } else if (publicFilter === 2) {
+      return report.public === true;
+    } else {
+      return report.public === false;
+    }
+  });
+
   const newReports = () => {
-    return reports.map((report) => (
+    return reportsToShow.map((report) => (
       <tr onClick={() => navigate(`/reports/${report.id}`)} key={report.id}>
         <td>
           <Tooltip label={new Date(report.created_at).toLocaleTimeString()}>
@@ -40,7 +65,9 @@ function OperatorAllReports() {
 
   return (
     <Container>
-      <Title align='center' order={2}>Kaikki raportit</Title>
+      <Title align="center" order={2}>
+        Kaikki raportit
+      </Title>
       <Table sx={{}} mt={'md'} highlightOnHover>
         <thead>
           <tr>
@@ -48,7 +75,7 @@ function OperatorAllReports() {
             <th>Raportti</th>
             <th>status</th>
             <th>department</th>
-            <th>public</th>
+            <th onClick={() => togglePublicFilter()}>{publicFilterStates[publicFilter]}</th>
           </tr>
         </thead>
         <tbody>{newReports()}</tbody>
