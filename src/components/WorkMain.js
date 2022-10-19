@@ -16,8 +16,8 @@ function WorkMain() {
   }, [user, navigate]);
 
   const newReports = () => {
-    return reports.map((report) => (
-      <tr onClick={() => console.log(report)} key={report.id}>
+    return reports.map((report) => (   
+      <tr onClick={() => navigate(`/reports/${report.id}`)} key={report.id}>
         <td>
           <Tooltip label={new Date(report.created_at).toLocaleTimeString()}>
             <Text>
