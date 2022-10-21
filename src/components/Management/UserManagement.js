@@ -1,4 +1,13 @@
-import { Container, Table, TextInput } from '@mantine/core';
+import {
+  Button,
+  Container,
+  Group,
+  Modal,
+  Select,
+  Table,
+  Text,
+  TextInput,
+} from '@mantine/core';
 import { IconSearch } from '@tabler/icons';
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../../supabaseClient';
@@ -7,16 +16,38 @@ function UserManagement() {
   const [users, setUsers] = useState([]);
   const [filter, setFilter] = useState('');
 
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [selectedUserRole, setSelectedUserRole] = useState(null);
+
+  const updateRole = async () => {
+    const { data, error } = await supabase
+      .from('profiles')
+      .update({ role: selectedUserRole })
+      .eq('id', selectedUser.id)
+      .select()
+      .single();
+
+      if (error) console.log(error);
+
+      if (data) {
+        console.log(data);
+        setUsers(users.map(user => user.id !== selectedUser.id ? user : {...user, role: data.role}))
+        setSelectedUser(null);
+      }
+
+
+  }
+
   useEffect(() => {
     const setInitialUsers = async () => {
       const { data, error } = await supabase
         .from('profiles')
         .select('*, user_emails(email)');
-      
+
       if (error) console.log(error);
 
       if (data) {
-        data.forEach(user => user.email = user.user_emails[0].email)
+        data.forEach((user) => (user.email = user.user_emails[0].email));
         setUsers(data);
       }
     };
@@ -25,8 +56,8 @@ function UserManagement() {
 
   const usersToShow = users.filter(
     (user) =>
-      user.email.includes(filter.toLowerCase()) ||
-      user.username.toLowerCase().includes(filter.toLowerCase())
+      user.email.includes(filter.toLowerCase().trim()) ||
+      user.username.toLowerCase().includes(filter.toLowerCase().trim())
   );
 
   return (
@@ -50,7 +81,13 @@ function UserManagement() {
         <tbody>
           {usersToShow.map((user) => {
             return (
-              <tr key={user.id}>
+              <tr
+                onClick={() => {
+                  setSelectedUser(user);
+                  setSelectedUserRole(user.role);
+                }}
+                key={user.id}
+              >
                 <td>{user.username}</td>
                 <td>{user.email}</td>
                 <td>{user.role}</td>
@@ -59,6 +96,33 @@ function UserManagement() {
           })}
         </tbody>
       </Table>
+      <Modal
+        opened={selectedUser}
+        withCloseButton={false}
+        closeOnClickOutside={false}
+        closeOnEscape={false}
+      >
+        <Container>
+          <Text>{selectedUser?.username}</Text>
+          <Text>{selectedUser?.email}</Text>
+          {/* <Text>{selectedUser?.role}</Text> */}
+          <Select
+            mt={'md'}
+            label="Käyttäjän rooli"
+            value={selectedUserRole}
+            onChange={setSelectedUserRole}
+            data={[
+              { value: 'user', label: 'Käyttäjä' },
+              { value: 'employee', label: 'Työntekijä' },
+              { value: 'operator', label: 'Ohjaaja' },
+            ]}
+          />
+        </Container>
+        <Group mt={'xl'} position="apart">
+          <Button onClick={() => setSelectedUser(null)}>Peruuta</Button>
+          <Button onClick={() => updateRole()}>Tallenna</Button>
+        </Group>
+      </Modal>
     </Container>
   );
 }
