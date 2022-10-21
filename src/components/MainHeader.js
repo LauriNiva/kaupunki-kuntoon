@@ -54,6 +54,9 @@ function MainHeader() {
           <Link className="top-menu-link" to="/userprofile">
             <Menu.Item icon={<IconUserCircle />}>Profiili</Menu.Item>
           </Link>
+          { (user?.manager === true) && <Link className="top-menu-link" to="/hallinta">
+            <Menu.Item icon={<IconUserCircle />}>Hallinta</Menu.Item>
+          </Link>}
           <Menu.Item icon={<IconLogout />} onClick={handleSignout}>
             Kirjaudu Ulos
           </Menu.Item>

@@ -16,6 +16,9 @@ import MainHeader from './components/MainHeader';
 import Report from './components/Report';
 import WorkMain from './components/WorkMain';
 import OperatorAllReports from './components/OperatorAllReports';
+import Management from './components/Management/Management';
+import UserManagement from './components/Management/UserManagement';
+import DepartmentManagement from './components/Management/DepartmentManagement';
 
 function App() {
   const navigate = useNavigate();
@@ -92,7 +95,10 @@ function App() {
           <Route path="/reports/:id" element={<Report />} />
           <Route path="/work" element={<WorkMain />} />
           <Route path="/operator" element={<OperatorAllReports />} />
-
+          
+          <Route path="/hallinta" element={<Management />} />
+          <Route path="/hallinta/kayttajat" element={<UserManagement />} />
+          <Route path="/hallinta/osastot" element={<DepartmentManagement />} />
           <Route path="/" element={<Mapview />} />
         </Routes>
       </AppShell>
