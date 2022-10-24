@@ -19,7 +19,7 @@ import { signOut } from '../services/auth.service';
 function MainHeader() {
   const session = useSelector((state) => state.sessions);
   const user = useSelector((state) => state.users);
-  const isEmployee = user?.role === ('employee' || 'operator');
+  const isEmployee = user?.role === 'employee';
   const isOperator = user?.role === 'operator';
   const username = user?.username;
 
@@ -93,7 +93,7 @@ function MainHeader() {
               </Button>
             </Link>
           )}
-          {isEmployee && (
+          {(isEmployee || isOperator) && (
             <Link to="/work">
               <Button color="orange.6">
                 <IconTools />
