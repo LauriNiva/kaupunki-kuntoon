@@ -1,44 +1,210 @@
-import { ActionIcon, Button, Container, Group, Modal, Table, Text } from '@mantine/core';
-import { IconTrashX } from '@tabler/icons';
+import {
+  ActionIcon,
+  Button,
+  Container,
+  Group,
+  Modal,
+  Select,
+  Table,
+  Text,
+  Title,
+} from '@mantine/core';
+import { IconSearch, IconTrashX } from '@tabler/icons';
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../../supabaseClient';
 
 function DepartmentManagement() {
   const [departments, setDepartments] = useState([]);
+  const [employees, setEmployees] = useState([]);
   const [selectedDepartment, setSelectedDepartment] = useState(null);
 
-  console.log(departments);
+  const [addMemberModalOpen, setAddMemberModalOpen] = useState(false);
+
+  const fetchDepartments = async () => {
+    const { data, error } = await supabase
+      .from('departments')
+      .select('*, users:profiles(id, username, user_emails(email))');
+
+    if (error) console.log(error);
+
+    if (data) {
+      data.forEach((department) =>
+        department.users.forEach(
+          (user) => (user.email = user.user_emails[0].email)
+        )
+      );
+      setDepartments(data);
+    }
+  };
 
   useEffect(() => {
-    const setInitialUsers = async () => {
+    fetchDepartments();
+  }, []);
+
+  useEffect(() => {
+    const setInitialEmployees = async () => {
       const { data, error } = await supabase
-        .from('departments')
-        .select(
-          '*, users:profiles(id, username, user_emails(email))'
-        );
+        .from('profiles')
+        .select('id, username, user_emails(email), departments(id)')
+        .not('role', 'in', '(user)');
 
       if (error) console.log(error);
 
       if (data) {
-        data.forEach((department) =>
-          department.users.forEach(
-            (user) => (user.email = user.user_emails[0].email)
-          )
-        );
-        setDepartments(data);
+        data.forEach((user) => {
+          user.email = user.user_emails[0].email;
+          user.departmentIds = [];
+          user.departments.forEach((dep) => user.departmentIds.push(dep.id));
+        });
+
+        setEmployees(data);
       }
     };
-    setInitialUsers();
+    setInitialEmployees();
   }, []);
 
   const updateDepartment = async () => {
-    console.log('updateDepartment', selectedDepartment);
+    console.log('updateDepartment', departments[selectedDepartment]);
     setSelectedDepartment(null);
+  };
+
+  const addUserToDepartment = async (userid) => {
+    const { data, error } = await supabase
+      .from('department_members')
+      .insert({ department: departments[selectedDepartment].id, user: userid })
+      .select();
+
+    if (error) {
+      console.log(error);
+    }
+
+    if (data) {
+      console.log(data);
+      setAddMemberModalOpen(false);
+      fetchDepartments();
+    }
+  };
+
+  const removeUserFromDepartment = async (user) => {
+    if (
+      window.confirm(
+        `Poistetaanko käyttäjä ${user.username} - ${user.email} osastosta?`
+      )
+    ) {
+      const { error, status } = await supabase
+        .from('department_members')
+        .delete()
+        .eq('department', departments[selectedDepartment].id)
+        .eq('user', user.id);
+
+      if (error) {
+        console.log(error);
+      }
+
+      if (status === 204) {
+        fetchDepartments();
+      }
+    }
+  };
+
+  const SelectedDepartmentModal = () => {
+    return (
+      <Modal
+        opened={selectedDepartment !== null}
+        onClose={() => setSelectedDepartment(null)}
+        withCloseButton={true}
+        closeOnClickOutside={false}
+        closeOnEscape={false}
+        size={'xl'}
+      >
+        <Container>
+          <Title mb={'xl'} order={2} align="center">
+            {departments[selectedDepartment]?.name}
+          </Title>
+          <Button
+            fullWidth
+            mb={'md'}
+            onClick={() => setAddMemberModalOpen(true)}
+          >
+            Lisää jäsen
+          </Button>
+          <Table>
+            <thead>
+              <tr>
+                <th>Käyttäjänimi</th>
+                <th>Sähköposti</th>
+                <th>Poista</th>
+              </tr>
+            </thead>
+            <tbody>
+              {departments[selectedDepartment]?.users.map((user) => {
+                return (
+                  <tr key={user.id}>
+                    <td>{user.username}</td>
+                    <td>{user.email}</td>
+                    <td>
+                      <ActionIcon
+                        variant="filled"
+                        color="red"
+                        onClick={() => removeUserFromDepartment(user)}
+                      >
+                        <IconTrashX />
+                      </ActionIcon>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </Table>
+        </Container>
+        {/* <Group mt={'xl'} position="apart">
+          <Button onClick={() => setSelectedDepartment(null)}>Peruuta</Button>
+          <Button onClick={() => updateDepartment()}>Tallenna</Button>
+        </Group> */}
+      </Modal>
+    );
+  };
+
+  const AddMemberModal = () => {
+    let userToAdd;
+
+    return (
+      <Modal
+        opened={addMemberModalOpen}
+        onClose={() => setAddMemberModalOpen(false)}
+        withCloseButton={true}
+        closeOnClickOutside={false}
+        closeOnEscape={false}
+        size={'lg'}
+      >
+        <Text align="center">Lisää jäsen osastoon:</Text>
+        <Text align="center">{departments[selectedDepartment]?.name}</Text>
+
+        <Select
+          my={'xl'}
+          label="Hae käyttäjä"
+          placeholder={'Käyttäjänimi - sähköposti'}
+          icon={<IconSearch />}
+          searchable
+          onChange={(value) => (userToAdd = value)}
+          data={employees.map((employee) => ({
+            value: employee.id,
+            label: `${employee.username} - ${employee.email}`,
+            disabled: employee.departmentIds.includes(
+              departments[selectedDepartment]?.id
+            ),
+          }))}
+        />
+        <Button onClick={() => addUserToDepartment(userToAdd)} fullWidth>
+          Lisää
+        </Button>
+      </Modal>
+    );
   };
 
   return (
     <Container>
-      <Table highlightOnHover>
+      <Table verticalSpacing={'md'} highlightOnHover>
         <thead>
           <tr>
             <th>Osasto</th>
@@ -46,11 +212,11 @@ function DepartmentManagement() {
           </tr>
         </thead>
         <tbody>
-          {departments.map((department) => {
+          {departments.map((department, index) => {
             return (
               <tr
                 onClick={() => {
-                  setSelectedDepartment(department);
+                  setSelectedDepartment(index);
                 }}
                 key={department.id}
               >
@@ -61,58 +227,8 @@ function DepartmentManagement() {
           })}
         </tbody>
       </Table>
-
-      <Modal
-        opened={selectedDepartment}
-        withCloseButton={false}
-        closeOnClickOutside={false}
-        closeOnEscape={false}
-        size={'xl'}
-      >
-        <Container>
-          <Text>{selectedDepartment?.name}</Text>
-          {/* <Text>{selectedUser?.role}</Text> */}
-          {/* <Select
-            mt={'md'}
-            label="Käyttäjän rooli"
-            value={selectedUserRole}
-            onChange={setSelectedUserRole}
-            data={[
-              { value: 'user', label: 'Käyttäjä' },
-              { value: 'employee', label: 'Työntekijä' },
-              { value: 'operator', label: 'Ohjaaja' },
-            ]}
-          /> */}
-          <Table>
-            <thead>
-              <tr>
-                <th>Käyttäjänimi</th>
-                <th>Sähköposti</th>
-                <th>Poista</th>
-              </tr>
-            </thead>
-            <tbody>
-              {selectedDepartment?.users.map((user) => {
-                return (
-                  <tr key={user.id}>
-                    <td>{user.username}</td>
-                    <td>{user.email}</td>
-                    <td>
-                      <ActionIcon variant='filled' color="red" onClick={() => console.log(user)}>
-                        <IconTrashX />
-                      </ActionIcon>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </Table>
-        </Container>
-        <Group mt={'xl'} position="apart">
-          <Button onClick={() => setSelectedDepartment(null)}>Peruuta</Button>
-          <Button onClick={() => updateDepartment()}>Tallenna</Button>
-        </Group>
-      </Modal>
+      <SelectedDepartmentModal />
+      <AddMemberModal />
     </Container>
   );
 }
