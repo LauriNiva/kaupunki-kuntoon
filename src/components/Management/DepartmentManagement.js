@@ -4,7 +4,7 @@ import {
   Container,
   Group,
   Modal,
-  NativeSelect,
+  Select,
   Table,
   Text,
   Title,
@@ -180,7 +180,7 @@ function DepartmentManagement() {
         <Text align="center">Lisää jäsen osastoon:</Text>
         <Text align="center">{departments[selectedDepartment]?.name}</Text>
 
-        <NativeSelect
+        <Select
           my={'xl'}
           label="Hae käyttäjä"
           placeholder={'Käyttäjänimi - sähköposti'}

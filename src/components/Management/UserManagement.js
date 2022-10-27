@@ -3,7 +3,7 @@ import {
   Container,
   Group,
   Modal,
-  NativeSelect,
+  Select,
   Table,
   Text,
   TextInput,
@@ -106,7 +106,7 @@ function UserManagement() {
           <Text>{selectedUser?.username}</Text>
           <Text>{selectedUser?.email}</Text>
           {/* <Text>{selectedUser?.role}</Text> */}
-          <NativeSelect
+          <Select
             mt={'md'}
             label="Käyttäjän rooli"
             value={selectedUserRole}
