@@ -26,9 +26,14 @@ function Mapview() {
 
   const reports = useSelector((state) => state.reports);
   const publicReports = useSelector((state) => state.publicReports);
-  const publicReportsToShow = user?.role === 'user' ? publicReports.filter(
-    (report) => report.user_id !== user?.id
-  ) : [];
+  const publicReportsToShow =
+    user
+      ? publicReports.filter((report) => report.user_id !== user?.id)
+      : publicReports;
+
+  console.log('reports', reports)
+  console.log('publicReports', publicReports)
+  console.log('publicReportsToShow', publicReportsToShow)
 
   const [showOwnReports, setShowOwnReports] = useState(true);
   const [showPublicReports, setShowPublicReports] = useState(true);
@@ -47,6 +52,8 @@ function Mapview() {
     if (showPublicReports) {
       reportsToReturn = reportsToReturn.concat(publicReportsToShow);
     }
+
+    console.log('reportsToReturn', reportsToReturn)
 
     return reportsToReturn;
   };
@@ -219,7 +226,7 @@ function Mapview() {
 
   return (
     <>
-      <FiltersPanel />
+      {user && <FiltersPanel /> }
       <BottomButtons />
       <MapContainer
         center={[64.07391245239761, 24.53362472782081]}
