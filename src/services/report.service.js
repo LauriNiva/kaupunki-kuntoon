@@ -36,11 +36,11 @@ export const getOwnReports = async (userid) => {
 
   if (data) return data;
 };
-export const getGroupReports = async (userid) => {
+export const getGroupReports = async (departmentIds) => {
   const { data, error } = await supabase
     .from('reports')
     .select()
-    .eq('user_id', userid);
+    .filter('department', 'in', `(${departmentIds})`);
 
   if (error) console.log('getGroupReports error:', error);
 
