@@ -27,6 +27,8 @@ function App() {
   const session = useSelector((state) => state.sessions);
   const user = useSelector((state) => state.users);
 
+  console.log('user', user)
+
   useEffect(() => {
     const getSession = async () => {
       const sessiondata = await supabase.auth.getSession();
@@ -48,7 +50,7 @@ function App() {
         if (userid) {
           const { data, error, status } = await supabase
             .from('profiles')
-            .select()
+            .select('*, departments:department_members(id:department)')
             .eq('id', userid)
             .single();
           if (data) {
