@@ -23,7 +23,7 @@ export const setInitialReports = (user) => {
       if (user.role === 'user') {
         reports = await getOwnReports(user.id);
       } else if (user.role === 'employee'){
-        reports = await getGroupReports(user.id);
+        reports = await getGroupReports(user.departments.map(d => d.id));
       } else if (user.role === 'operator'){
         reports = await getAllReports(user.id);
       }
