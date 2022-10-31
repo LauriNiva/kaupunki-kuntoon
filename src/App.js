@@ -50,10 +50,11 @@ function App() {
         if (userid) {
           const { data, error, status } = await supabase
             .from('profiles')
-            .select('*, departments:department_members(id:department)')
+            .select('*, department_members(department)')
             .eq('id', userid)
             .single();
           if (data) {
+            if (data.department_members) data.departments = data.department_members.map(dep => dep.department)
             dispatch(setUser(data));
           } else {
             navigate('/userprofile');
@@ -69,9 +70,6 @@ function App() {
     checkUsername();
   }, [session, dispatch, navigate]);
 
-  useEffect(() => {
-    dispatch(setInitialPublicReports());
-  }, [session, dispatch]);
 
   useEffect(() => {
     dispatch(setInitialReports(user));

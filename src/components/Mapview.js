@@ -25,38 +25,40 @@ function Mapview() {
   const user = useSelector((state) => state.users);
 
   const reports = useSelector((state) => state.reports);
-  const publicReports = useSelector((state) => state.publicReports);
-  const publicReportsToShow =
-    user
-      ? publicReports.filter((report) => report.user_id !== user?.id)
-      : publicReports;
+  // const publicReports = useSelector((state) => state.publicReports);
+  // const publicReportsToShow =
+  //   user
+  //     ? publicReports.filter((report) => report.user_id !== user?.id)
+  //     : publicReports;
 
-  console.log('reports', reports)
-  console.log('publicReports', publicReports)
-  console.log('publicReportsToShow', publicReportsToShow)
+  console.log('reports', reports);
+  // console.log('publicReports', publicReports)
+  // console.log('publicReportsToShow', publicReportsToShow)
 
   const [showOwnReports, setShowOwnReports] = useState(true);
   const [showPublicReports, setShowPublicReports] = useState(true);
+  const [showDepartmentReports, setShowDepartmentReports] = useState(true);
 
   const ownMarkerColor = '#7950F2'; // violet.6
   const publicMarkerColor = '#D6336C'; // pink.7
+  const departmentMarkerColor = '#20c997'; // teal.5
 
-  const reportsToShow = () => {
-    let reportsToReturn = [];
-    if (user) {
-      if (showOwnReports) {
-        reportsToReturn = reportsToReturn.concat(reports);
-      }
-    }
+  // const reportsToShow = () => {
+  //   let reportsToReturn = [];
+  //   if (user) {
+  //     if (showOwnReports) {
+  //       reportsToReturn = reportsToReturn.concat(reports);
+  //     }
+  //   }
 
-    if (showPublicReports) {
-      reportsToReturn = reportsToReturn.concat(publicReportsToShow);
-    }
+  //   if (showPublicReports) {
+  //     reportsToReturn = reportsToReturn.concat(publicReportsToShow);
+  //   }
 
-    console.log('reportsToReturn', reportsToReturn)
+  //   console.log('reportsToReturn', reportsToReturn)
 
-    return reportsToReturn;
-  };
+  //   return reportsToReturn;
+  // };
 
   //   useEffect(() => {
   //     if (!map) return;
@@ -137,12 +139,68 @@ function Mapview() {
     );
   };
 
-  const generateMarkers = () => {
-    return reportsToShow().map((report) => {
-      const icon =
-        report.user_id === user?.id
-          ? generateCustomMarker(ownMarkerColor)
-          : generateCustomMarker(publicMarkerColor);
+  const generatePublicMarkers = () => {
+    return reports.public?.map((report) => {
+      const icon = generateCustomMarker(publicMarkerColor);
+      return (
+        <Marker
+          icon={icon}
+          key={report.id}
+          position={[report.lat, report.long]}
+          eventHandlers={{
+            click: (e) => {
+              const bounds = map.getBounds();
+              const mapheight = bounds._northEast.lat - bounds._southWest.lat;
+              map.setView([e.latlng.lat + mapheight / 3, e.latlng.lng]);
+            },
+          }}
+        >
+          <Popup
+            closeButton={false}
+            autoPan={false}
+            maxWidth={400}
+            className="report-popup"
+          >
+            <ReportPopup report={report} />
+          </Popup>
+        </Marker>
+      );
+    });
+  };
+
+  const generateOwnMarkers = () => {
+    return reports.own?.map((report) => {
+      const icon = generateCustomMarker(ownMarkerColor)
+          
+      return (
+        <Marker
+          icon={icon}
+          key={report.id}
+          position={[report.lat, report.long]}
+          eventHandlers={{
+            click: (e) => {
+              const bounds = map.getBounds();
+              const mapheight = bounds._northEast.lat - bounds._southWest.lat;
+              map.setView([e.latlng.lat + mapheight / 3, e.latlng.lng]);
+            },
+          }}
+        >
+          <Popup
+            closeButton={false}
+            autoPan={false}
+            maxWidth={400}
+            className="report-popup"
+          >
+            <ReportPopup report={report} />
+          </Popup>
+        </Marker>
+      );
+    });
+  };
+
+  const generateDepartmentMarkers = () => {
+    return reports.department?.map((report) => {
+      const icon = generateCustomMarker(departmentMarkerColor);
       return (
         <Marker
           icon={icon}
@@ -173,15 +231,24 @@ function Mapview() {
     return (
       <Group position={'right'}>
         <Container className="map-filter-panel" p={'md'}>
-          {user && (
+          {user.role !== 'user' && (
             <Checkbox
-              checked={showOwnReports}
-              onChange={() => setShowOwnReports(!showOwnReports)}
-              color={'violet.6'}
-              label="Omat"
+              checked={showDepartmentReports}
+              onChange={() => setShowDepartmentReports(!showDepartmentReports)}
+              color={'teal.5'}
+              label="Osaston"
               mb={'xs'}
             />
           )}
+
+          <Checkbox
+            checked={showOwnReports}
+            onChange={() => setShowOwnReports(!showOwnReports)}
+            color={'violet.6'}
+            label="Omat"
+            mb={'xs'}
+          />
+
           <Checkbox
             checked={showPublicReports}
             onChange={() => setShowPublicReports(!showPublicReports)}
@@ -226,7 +293,7 @@ function Mapview() {
 
   return (
     <>
-      {user && <FiltersPanel /> }
+      {user && <FiltersPanel />}
       <BottomButtons />
       <MapContainer
         center={[64.07391245239761, 24.53362472782081]}
@@ -239,8 +306,9 @@ function Mapview() {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        {/* <span className="crosshair">+</span> */}
-        {generateMarkers()}
+        { showPublicReports && generatePublicMarkers()}
+        { showOwnReports && generateOwnMarkers()}
+        { showDepartmentReports && generateDepartmentMarkers()}
       </MapContainer>
     </>
   );
