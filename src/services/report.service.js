@@ -46,7 +46,7 @@ export const getGroupReports = async (departmentIds) => {
 
   if (data) return data;
 };
-export const getAllReports = async (userid) => {
+export const getAllReports = async () => {
   const { data, error } = await supabase.from('reports').select();
 
   if (error) console.log('getAllReports error:', error);
