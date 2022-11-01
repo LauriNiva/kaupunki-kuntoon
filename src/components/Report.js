@@ -12,6 +12,7 @@ import {
   Select,
   Stepper,
   Text,
+  Textarea,
   Title,
 } from '@mantine/core';
 import React, { useEffect, useState } from 'react';
@@ -29,12 +30,13 @@ function Report() {
 
   const [imageFullscreen, setImageFullscreen] = useState(false);
   const [departmentModalOpen, setDepartmentModalOpen] = useState(false);
+  const [readyModalOpen, setReadyModalOpen] = useState(false);
 
   const [report, setReport] = useState(null);
   // const [reportStep, setReportStep] = useState(3);
   const reportStep = report?.status;
 
-  const departments = useSelector(state => state.departments)
+  const departments = useSelector((state) => state.departments);
 
   const fetchReport = async () => {
     const fetchedReport = await getSingleReport(id);
@@ -53,12 +55,6 @@ function Report() {
     : `https://yeopeoovpnhcjzmqilyz.supabase.co/storage/v1/object/public/kaupunki-images/${report?.images}`;
 
   const updateReportDepartment = async (departmentid) => {
-    console.log(departmentid, report.id);
-    // const { data, error } = await supabase
-    //   .from('department_reports')
-    //   .upsert({ department: departmentid, report: report.id })
-    //   .select();
-
     const { data, error } = await supabase
       .from('reports')
       .update({ department: departmentid, public: true, status: 2 })
@@ -69,10 +65,66 @@ function Report() {
       console.log(error);
     }
     if (data) {
-      console.log(data);
       fetchReport();
       setDepartmentModalOpen(false);
     }
+  };
+
+  const handleWorkClick = async () => {
+    const { data, error } = await supabase
+      .from('reports')
+      .update({ status: 3 })
+      .eq('id', report.id)
+      .select();
+
+    if (error) {
+      console.log(error);
+    }
+    if (data) {
+      fetchReport();
+    }
+  };
+
+  const setReportReady = async (comment) => {
+    const { data, error } = await supabase
+      .from('reports')
+      .update({ status: 4, comment })
+      .eq('id', report.id)
+      .select();
+
+    if (error) {
+      console.log(error);
+    }
+    if (data) {
+      setReadyModalOpen(false);
+      fetchReport();
+    }
+  };
+
+  const ReadyModal = () => {
+    let comment = '';
+    return (
+      <Modal
+        opened={readyModalOpen}
+        onClose={() => setReadyModalOpen(false)}
+        centered
+        closeOnClickOutside={false}
+      >
+        <Text align="center">Kirjoita kommentti ja merkitse valmiiksi.</Text>
+        <Text align="center">Kommentti näkyy kaikille käyttäjille!</Text>
+        <Textarea
+          onChange={(e) => (comment = e.currentTarget.value)}
+          minRows={4}
+          my={'md'}
+        />
+        <Group position="apart">
+          <Button color={'pink'}>Peruuta</Button>
+          <Button onClick={() => setReportReady(comment)} color={'teal.5'}>
+            Valmis
+          </Button>
+        </Group>
+      </Modal>
+    );
   };
 
   const DepartmentModal = () => {
@@ -92,7 +144,10 @@ function Report() {
           <Select
             my={'lg'}
             onChange={(value) => (selectedDepartment = value)}
-            data={Object.entries(departments)?.map((d) => ({ value: d[0], label: d[1] }))}
+            data={Object.entries(departments)?.map((d) => ({
+              value: d[0],
+              label: d[1],
+            }))}
           />
           <Group position="apart">
             <Button>Peruuta</Button>
@@ -103,6 +158,32 @@ function Report() {
         </Container>
       </Modal>
     );
+  };
+
+  const StatusButton = () => {
+    if (report.status === 2) {
+      return (
+        <Button
+          onClick={() => handleWorkClick()}
+          color={'orange'}
+          my={'xl'}
+          fullWidth
+        >
+          Ota työn alle
+        </Button>
+      );
+    } else if (report.status === 3) {
+      return (
+        <Button
+          onClick={() => setReadyModalOpen(true)}
+          color={'orange'}
+          my={'xl'}
+          fullWidth
+        >
+          Merkitse valmiiksi
+        </Button>
+      );
+    }
   };
 
   return (
@@ -133,10 +214,7 @@ function Report() {
           />
 
           <Paper p="md" shadow="sm" withBorder mt="lg">
-            <Title mb={'lg'} align="center" order={3}>
-              Raportti
-            </Title>
-            <Group position='center'>
+            <Group position="center">
               {isOwner && <Badge>Oma</Badge>}
               {report?.public && <Badge>Julkinen</Badge>}
               {report?.status === 4 && <Badge>Valmis</Badge>}
@@ -147,9 +225,6 @@ function Report() {
           </Paper>
 
           <Paper p="md" shadow="sm" withBorder mt="lg">
-            <Title mb={'lg'} align="center" order={3}>
-              Vastuuosasto
-            </Title>
             <Text align="center">
               {report.department
                 ? departments[report.department]
@@ -189,11 +264,11 @@ function Report() {
                 <Text align="center">Raportti on otettu työn alle.</Text>
               </Stepper.Step>
               <Stepper.Completed>
-                <Text align="center">Valmis.</Text>
                 <Text align="center">{report.comment}</Text>
               </Stepper.Completed>
             </Stepper>
-            {}
+            {user?.departments.includes(report.department) && <StatusButton />}
+            <ReadyModal />
           </Paper>
         </Container>
       )}
