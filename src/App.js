@@ -25,9 +25,7 @@ function App() {
 
   const session = useSelector((state) => state.sessions);
   const user = useSelector((state) => state.users);
-  const reportsLoaded = useSelector((state) => state.reports.public)
-  console.log('---',reportsLoaded)
-
+  const reportsLoaded = useSelector((state) => state.reports.public);
 
   useEffect(() => {
     const getSession = async () => {
@@ -44,7 +42,6 @@ function App() {
   }, [dispatch]);
 
   useEffect(() => {
-
     const checkUsername = async () => {
       const userid = session?.user.id;
       if (userid) {
