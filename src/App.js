@@ -18,6 +18,7 @@ import OperatorAllReports from './components/OperatorAllReports';
 import Management from './components/Management/Management';
 import UserManagement from './components/Management/UserManagement';
 import DepartmentManagement from './components/Management/DepartmentManagement';
+import { setInitialDepartments } from './reducers/departmentsReducer';
 
 function App() {
   const navigate = useNavigate();
@@ -39,6 +40,10 @@ function App() {
     supabase.auth.onAuthStateChange((_event, session) => {
       dispatch(setSession(session));
     });
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(setInitialDepartments());
   }, [dispatch]);
 
   useEffect(() => {
@@ -82,8 +87,8 @@ function App() {
 
   return (
     <div>
-      <AppShell padding="0" header={<MainHeader />}>
-        {reportsLoaded ? (
+      {reportsLoaded ? (
+        <AppShell padding="0" header={<MainHeader />}>
           <Routes>
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
@@ -102,12 +107,12 @@ function App() {
             />
             <Route path="/" element={<Mapview />} />
           </Routes>
-        ) : (
-          <Center mt={'40vh'}>
-            <Loader color="teal.5" size="xl" />
-          </Center>
-        )}
-      </AppShell>
+        </AppShell>
+      ) : (
+        <Center mt={'40vh'}>
+          <Loader color="teal.5" size="xl" />
+        </Center>
+      )}
     </div>
   );
 }
