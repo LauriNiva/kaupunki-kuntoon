@@ -18,7 +18,7 @@ import OperatorAllReports from './components/OperatorAllReports';
 import Management from './components/Management/Management';
 import UserManagement from './components/Management/UserManagement';
 import DepartmentManagement from './components/Management/DepartmentManagement';
-import { setInitialDepartments } from './reducers/departmentsReducer';
+import { setInitialDepartments } from './reducers/departmentReducer';
 
 function App() {
   const navigate = useNavigate();

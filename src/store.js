@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import departmentsReducer from './reducers/departmentsReducer';
+import departmentsReducer from './reducers/departmentReducer';
 import reportReducer from './reducers/reportReducer';
 import sessionReducer from './reducers/sessionReducer';
 import userReducer from './reducers/userReducer';
