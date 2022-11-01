@@ -15,13 +15,13 @@ export const getPublicReports = async () => {
 export const getSingleReport = async (id) => {
   const { data, error } = await supabase
     .from('reports')
-    .select('*, departments(name)')
+    .select()
     .eq('id', id)
     .single();
   if (error) console.log(error);
 
   if (data) {
-    if (data.departments?.name) data.department = data.departments.name;
+    //if (data.departments?.name) data.department = data.departments.name;
     return data;
   }
 };
