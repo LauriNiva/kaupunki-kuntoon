@@ -34,7 +34,7 @@ function Report() {
   // const [reportStep, setReportStep] = useState(3);
   const reportStep = report?.status;
 
-  const [departments, setDepartments] = useState(null);
+  const departments = useSelector(state => state.departments)
 
   const fetchReport = async () => {
     const fetchedReport = await getSingleReport(id);
@@ -44,20 +44,6 @@ function Report() {
   useEffect(() => {
     fetchReport();
   }, []);
-
-  useEffect(() => {
-    const fetchDepartments = async () => {
-      const { data, error } = await supabase.from('departments').select();
-      if (error) console.log(error);
-      if (data) {
-        setDepartments(data);
-      }
-    };
-
-    if (user?.role === 'operator') {
-      fetchDepartments();
-    }
-  }, [user]);
 
   const isOwner = loggedinUserId === report?.user_id;
   console.log('---report:', report);
@@ -106,7 +92,7 @@ function Report() {
           <Select
             my={'lg'}
             onChange={(value) => (selectedDepartment = value)}
-            data={departments?.map((d) => ({ value: d.id, label: d.name }))}
+            data={Object.entries(departments)?.map((d) => ({ value: d[0], label: d[1] }))}
           />
           <Group position="apart">
             <Button>Peruuta</Button>
@@ -166,7 +152,7 @@ function Report() {
             </Title>
             <Text align="center">
               {report.department
-                ? report.department
+                ? departments[report.department]
                 : 'Raporttia ei ole vielä ohjattu eteenpäin.'}
             </Text>
             {user?.role === 'operator' && (
@@ -207,6 +193,7 @@ function Report() {
                 <Text align="center">{report.comment}</Text>
               </Stepper.Completed>
             </Stepper>
+            {}
           </Paper>
         </Container>
       )}
