@@ -2,11 +2,13 @@ import {
   Badge,
   Button,
   Card,
+  Center,
   Checkbox,
   CloseButton,
   Container,
   Group,
   Image,
+  Loader,
   Text,
   Tooltip,
 } from '@mantine/core';
@@ -236,7 +238,7 @@ function Mapview() {
               checked={showDepartmentReports}
               onChange={() => setShowDepartmentReports(!showDepartmentReports)}
               color={'teal.5'}
-              label={`Osaston (${reports.department.length})`}
+              label={`Osaston (${reports.department?.length})`}
               mb={'xs'}
             />
           )}
@@ -245,7 +247,7 @@ function Mapview() {
             checked={showOwnReports}
             onChange={() => setShowOwnReports(!showOwnReports)}
             color={'violet.6'}
-            label={`Omat (${reports.own.length})`}
+            label={`Omat (${reports.own?.length})`}
             mb={'xs'}
           />
 
@@ -253,7 +255,7 @@ function Mapview() {
             checked={showPublicReports}
             onChange={() => setShowPublicReports(!showPublicReports)}
             color={'pink.7'}
-            label={`Julkiset (${reports.public.length})`}
+            label={`Julkiset (${reports.public?.length})`}
           />
         </Container>
       </Group>
@@ -293,23 +295,31 @@ function Mapview() {
 
   return (
     <>
-      {user && <FiltersPanel />}
-      <BottomButtons />
-      <MapContainer
-        center={[64.07391245239761, 24.53362472782081]}
-        zoom={20}
-        scrollWheelZoom={false}
-        className="mapview-map"
-        ref={setMap}
-      >
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        { showPublicReports && generatePublicMarkers()}
-        { showOwnReports && generateOwnMarkers()}
-        { showDepartmentReports && generateDepartmentMarkers()}
-      </MapContainer>
+      {reports.public ? (
+        <>
+          {user && <FiltersPanel />}
+          <BottomButtons />
+          <MapContainer
+            center={[64.07391245239761, 24.53362472782081]}
+            zoom={20}
+            scrollWheelZoom={false}
+            className="mapview-map"
+            ref={setMap}
+          >
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+            {showPublicReports && generatePublicMarkers()}
+            {showOwnReports && generateOwnMarkers()}
+            {showDepartmentReports && generateDepartmentMarkers()}
+          </MapContainer>
+        </>
+      ) : (
+        <Center mt={'40vh'}>
+          <Loader color="teal.5" size="xl" />
+        </Center>
+      )}
     </>
   );
 }
