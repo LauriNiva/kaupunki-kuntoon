@@ -1,4 +1,4 @@
-import { AppShell, Title } from '@mantine/core';
+import { AppShell, Center, Loader, Title } from '@mantine/core';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Route, Routes, useNavigate } from 'react-router-dom';
@@ -25,6 +25,8 @@ function App() {
 
   const session = useSelector((state) => state.sessions);
   const user = useSelector((state) => state.users);
+  const reportsLoaded = useSelector((state) => state.reports.public)
+  console.log('---',reportsLoaded)
 
 
   useEffect(() => {
@@ -84,21 +86,30 @@ function App() {
   return (
     <div>
       <AppShell padding="0" header={<MainHeader />}>
-        <Routes>
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/userprofile" element={<Userprofile />} />
-          <Route path="/own" element={<OwnReports />} />
-          <Route path="/new" element={<NewReportForm />} />
-          <Route path="/reports/:id" element={<Report />} />
-          <Route path="/work" element={<WorkMain />} />
-          <Route path="/operator" element={<OperatorAllReports />} />
+        {reportsLoaded ? (
+          <Routes>
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/userprofile" element={<Userprofile />} />
+            <Route path="/own" element={<OwnReports />} />
+            <Route path="/new" element={<NewReportForm />} />
+            <Route path="/reports/:id" element={<Report />} />
+            <Route path="/work" element={<WorkMain />} />
+            <Route path="/operator" element={<OperatorAllReports />} />
 
-          <Route path="/hallinta" element={<Management />} />
-          <Route path="/hallinta/kayttajat" element={<UserManagement />} />
-          <Route path="/hallinta/osastot" element={<DepartmentManagement />} />
-          <Route path="/" element={<Mapview />} />
-        </Routes>
+            <Route path="/hallinta" element={<Management />} />
+            <Route path="/hallinta/kayttajat" element={<UserManagement />} />
+            <Route
+              path="/hallinta/osastot"
+              element={<DepartmentManagement />}
+            />
+            <Route path="/" element={<Mapview />} />
+          </Routes>
+        ) : (
+          <Center mt={'40vh'}>
+            <Loader color="teal.5" size="xl" />
+          </Center>
+        )}
       </AppShell>
     </div>
   );

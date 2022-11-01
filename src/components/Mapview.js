@@ -2,13 +2,11 @@ import {
   Badge,
   Button,
   Card,
-  Center,
   Checkbox,
   CloseButton,
   Container,
   Group,
   Image,
-  Loader,
   Text,
   Tooltip,
 } from '@mantine/core';
@@ -172,8 +170,8 @@ function Mapview() {
 
   const generateOwnMarkers = () => {
     return reports.own?.map((report) => {
-      const icon = generateCustomMarker(ownMarkerColor)
-          
+      const icon = generateCustomMarker(ownMarkerColor);
+
       return (
         <Marker
           icon={icon}
@@ -295,31 +293,23 @@ function Mapview() {
 
   return (
     <>
-      {reports.public ? (
-        <>
-          {user && <FiltersPanel />}
-          <BottomButtons />
-          <MapContainer
-            center={[64.07391245239761, 24.53362472782081]}
-            zoom={20}
-            scrollWheelZoom={false}
-            className="mapview-map"
-            ref={setMap}
-          >
-            <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-            {showPublicReports && generatePublicMarkers()}
-            {showOwnReports && generateOwnMarkers()}
-            {showDepartmentReports && generateDepartmentMarkers()}
-          </MapContainer>
-        </>
-      ) : (
-        <Center mt={'40vh'}>
-          <Loader color="teal.5" size="xl" />
-        </Center>
-      )}
+      {user && <FiltersPanel />}
+      <BottomButtons />
+      <MapContainer
+        center={[64.07391245239761, 24.53362472782081]}
+        zoom={20}
+        scrollWheelZoom={false}
+        className="mapview-map"
+        ref={setMap}
+      >
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        {showPublicReports && generatePublicMarkers()}
+        {showOwnReports && generateOwnMarkers()}
+        {showDepartmentReports && generateDepartmentMarkers()}
+      </MapContainer>
     </>
   );
 }
