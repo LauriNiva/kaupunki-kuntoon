@@ -10,6 +10,11 @@ button a {
   color: inherit;
 }
 
+.navbar a {
+  color: rgb(38, 225, 204);
+  font-weight: 800;
+}
+
 .top-menu-link {
   text-decoration: none;
 }

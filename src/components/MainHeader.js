@@ -85,25 +85,28 @@ function MainHeader() {
             </MediaQuery>
           </Link>
         </Group>
-        <Group>
+        <Group className='navbar'>
           {isOperator && (
             <Link to="/operator">
-              <Button color="cyan.4">
+              OPERATOR
+              {/* <Button color="cyan.4">
                 <IconTools />
-              </Button>
+              </Button> */}
             </Link>
           )}
           {(isEmployee || isOperator) && (
             <Link to="/work">
-              <Button color="orange.6">
+              WORK
+              {/* <Button color="orange.6">
                 <IconTools />
-              </Button>
+              </Button> */}
             </Link>
           )}
           <Link to="/">
-            <Button color="teal.5">
+            KARTTA
+            {/* <Button color="teal.5">
               <IconMap2 />
-            </Button>
+            </Button> */}
           </Link>
           {session ? (
             <>
@@ -114,7 +117,7 @@ function MainHeader() {
             </>
           ) : (
             <Link to="/login">
-              <Button>Login</Button>
+              <Button color={'pink'}>Login</Button>
             </Link>
           )}
         </Group>
