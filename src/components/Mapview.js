@@ -236,7 +236,7 @@ function Mapview() {
               checked={showDepartmentReports}
               onChange={() => setShowDepartmentReports(!showDepartmentReports)}
               color={'teal.5'}
-              label="Osaston"
+              label={`Osaston (${reports.department.length})`}
               mb={'xs'}
             />
           )}
@@ -245,7 +245,7 @@ function Mapview() {
             checked={showOwnReports}
             onChange={() => setShowOwnReports(!showOwnReports)}
             color={'violet.6'}
-            label="Omat"
+            label={`Omat (${reports.own.length})`}
             mb={'xs'}
           />
 
@@ -253,7 +253,7 @@ function Mapview() {
             checked={showPublicReports}
             onChange={() => setShowPublicReports(!showPublicReports)}
             color={'pink.7'}
-            label="Julkiset"
+            label={`Julkiset (${reports.public.length})`}
           />
         </Container>
       </Group>
