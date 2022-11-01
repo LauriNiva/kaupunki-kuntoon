@@ -12,7 +12,11 @@ function OperatorAllReports() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (user?.role === 'user') navigate('/');
+    console.log('bleep');
+    console.log(user);
+    if (user) {
+      if (user.role !== 'operator') navigate('/');
+    }
   }, [user, navigate]);
 
   const publicFilterStates = {
@@ -30,7 +34,7 @@ function OperatorAllReports() {
     }
   };
 
-  const reportsToShow = reports.filter((report) => {
+  const reportsToShow = reports.all?.filter((report) => {
     if (publicFilter === 1) {
       return true;
     } else if (publicFilter === 2) {
@@ -79,7 +83,7 @@ function OperatorAllReports() {
             </th>
           </tr>
         </thead>
-        <tbody>{newReports()}</tbody>
+        <tbody>{reports.all && newReports()}</tbody>
       </Table>
     </Container>
   );

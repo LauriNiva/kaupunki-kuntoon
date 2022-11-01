@@ -7,7 +7,6 @@ import NewReportForm from './components/NewReportForm';
 import { setSession } from './reducers/sessionReducer';
 import { supabase } from './supabaseClient';
 import { setInitialReports } from './reducers/reportReducer';
-import { setInitialPublicReports } from './reducers/publicReportReducer';
 import Userprofile from './components/Userprofile';
 import { setUser } from './reducers/userReducer';
 import Login from './components/Login';
@@ -27,7 +26,6 @@ function App() {
   const session = useSelector((state) => state.sessions);
   const user = useSelector((state) => state.users);
 
-  console.log('user', user)
 
   useEffect(() => {
     const getSession = async () => {
@@ -44,32 +42,32 @@ function App() {
   }, [dispatch]);
 
   useEffect(() => {
+
     const checkUsername = async () => {
-      try {
-        const userid = session?.user.id;
-        if (userid) {
-          const { data, error, status } = await supabase
-            .from('profiles')
-            .select('*, department_members(department)')
-            .eq('id', userid)
-            .single();
-          if (data) {
-            if (data.department_members) data.departments = data.department_members.map(dep => dep.department)
-            dispatch(setUser(data));
-          } else {
-            navigate('/userprofile');
-          }
+      const userid = session?.user.id;
+      if (userid) {
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('*, department_members(department)')
+          .eq('id', userid)
+          .single();
+        if (error) console.log(error);
+        if (data) {
+          if (data.department_members)
+            data.departments = data.department_members.map(
+              (dep) => dep.department
+            );
+          dispatch(setUser(data));
         } else {
-          dispatch(setUser(null));
+          navigate('/userprofile');
         }
-      } catch (error) {
-        console.log('error while checking username', error);
+      } else {
+        dispatch(setUser(null));
       }
     };
 
     checkUsername();
   }, [session, dispatch, navigate]);
-
 
   useEffect(() => {
     dispatch(setInitialReports(user));
@@ -95,7 +93,7 @@ function App() {
           <Route path="/reports/:id" element={<Report />} />
           <Route path="/work" element={<WorkMain />} />
           <Route path="/operator" element={<OperatorAllReports />} />
-          
+
           <Route path="/hallinta" element={<Management />} />
           <Route path="/hallinta/kayttajat" element={<UserManagement />} />
           <Route path="/hallinta/osastot" element={<DepartmentManagement />} />

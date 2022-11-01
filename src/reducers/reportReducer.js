@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { getAllReports } from '../services/report.service';
+import { supabase } from '../supabaseClient';
 
 const reportSlice = createSlice({
   name: 'reports',
@@ -9,7 +10,7 @@ const reportSlice = createSlice({
       return action.payload;
     },
     concatNewReport: (state, action) => {
-      return state.concat(action.payload);
+      return state.own.concat(action.payload);
     },
   },
 });
@@ -18,12 +19,14 @@ export const { setReports, concatNewReport } = reportSlice.actions;
 
 export const setInitialReports = (user) => {
   return async (dispatch) => {
+    const authUser = await supabase.auth.getUser();
+
+    if (authUser.data.user && !user) return;
+
     const fetchedReports = await getAllReports();
     let reports;
 
-    console.log('fetchedReports', fetchedReports);
     if (user) {
-      console.log('user', user);
       const publicreports = fetchedReports.filter(
         (report) => report.public === true
       );
