@@ -91,7 +91,18 @@ function OperatorAllReports() {
 
   const SingleReport = ({ report }) => {
     return (
-      <Paper withBorder shadow={'md'} mb={'md'} p={'md'}>
+      <Paper
+        sx={{
+          '&:hover': {
+            backgroundColor: '#eee',
+          },
+        }}
+        onClick={() => navigate(`/reports/${report.id}`)}
+        withBorder
+        shadow={'md'}
+        mb={'md'}
+        p={'md'}
+      >
         <Grid gutter={'xs'}>
           <Grid.Col span={6}>
             <Tooltip label="Luotu" withArrow position="top-start">
@@ -131,7 +142,7 @@ function OperatorAllReports() {
       { value: 'updated_old', label: 'Vanhin muokattu' },
     ];
     return (
-      <Paper radius={'md'} shadow={'xl'} my={'xl'} p={'lg'}>
+      <Paper  radius={'md'} shadow={'xl'} my={'xl'} p={'lg'}>
         <Grid gutter={'xl'}>
           <Grid.Col xs={6} sm={4}>
             <NativeSelect
