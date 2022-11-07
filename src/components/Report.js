@@ -51,7 +51,7 @@ function Report() {
   console.log('---report:', report);
 
   const imageSrc = !report?.images
-    ? 'https://yeopeoovpnhcjzmqilyz.supabase.co/storage/v1/object/public/kaupunki-images/default.jpg'
+    ? 'https://yeopeoovpnhcjzmqilyz.supabase.co/storage/v1/object/public/kaupunki-images/default.webp'
     : `https://yeopeoovpnhcjzmqilyz.supabase.co/storage/v1/object/public/kaupunki-images/${report?.images}`;
 
   const updateReportDepartment = async (departmentid) => {

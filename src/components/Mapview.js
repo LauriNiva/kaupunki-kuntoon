@@ -116,7 +116,7 @@ function Mapview() {
           {!report.images ? (
             <Image
               src={
-                'https://yeopeoovpnhcjzmqilyz.supabase.co/storage/v1/object/public/kaupunki-images/default.jpg'
+                'https://yeopeoovpnhcjzmqilyz.supabase.co/storage/v1/object/public/kaupunki-images/default.webp'
               }
             />
           ) : (
