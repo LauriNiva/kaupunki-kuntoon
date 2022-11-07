@@ -19,6 +19,7 @@ import Management from './components/Management/Management';
 import UserManagement from './components/Management/UserManagement';
 import DepartmentManagement from './components/Management/DepartmentManagement';
 import { setInitialDepartments } from './reducers/departmentReducer';
+import OwnReports from './components/OwnReports';
 
 function App() {
   const navigate = useNavigate();
@@ -77,13 +78,6 @@ function App() {
     dispatch(setInitialReports(user));
   }, [user, dispatch]);
 
-  const OwnReports = () => {
-    return (
-      <>
-        <Title order={2}>Omat raportit</Title>
-      </>
-    );
-  };
 
   return (
     <div>
