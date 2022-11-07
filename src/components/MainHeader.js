@@ -13,7 +13,7 @@ import {
   Drawer,
   Stack,
 } from '@mantine/core';
-import { IconLogout, IconMap2, IconTools, IconUserCircle } from '@tabler/icons';
+import { IconList, IconLogout, IconMap2, IconTableOptions, IconTools, IconUserCircle } from '@tabler/icons';
 import Avatar from 'boring-avatars';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -77,14 +77,14 @@ function MainHeader() {
         <Menu.Dropdown>
           <Menu.Label>{username}</Menu.Label>
           <Link className="top-menu-link" to="/own">
-            <Menu.Item icon={<IconUserCircle />}>Omat</Menu.Item>
+            <Menu.Item icon={<IconList />}>Omat</Menu.Item>
           </Link>
           <Link className="top-menu-link" to="/userprofile">
             <Menu.Item icon={<IconUserCircle />}>Profiili</Menu.Item>
           </Link>
           {user?.manager === true && (
             <Link className="top-menu-link" to="/hallinta">
-              <Menu.Item icon={<IconUserCircle />}>Hallinta</Menu.Item>
+              <Menu.Item icon={<IconTableOptions />}>Hallinta</Menu.Item>
             </Link>
           )}
           <Menu.Item icon={<IconLogout />} onClick={handleSignout}>
