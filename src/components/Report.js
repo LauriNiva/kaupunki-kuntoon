@@ -211,6 +211,7 @@ function Report() {
             onClick={() => setImageFullscreen(true)}
             height={250}
             src={imageSrc}
+            withPlaceholder
           />
 
           <Paper p="md" shadow="sm" withBorder mt="lg">
