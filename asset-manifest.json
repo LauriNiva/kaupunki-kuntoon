@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/kaupunki-kuntoon/static/css/main.9a057028.css",
+    "main.js": "/kaupunki-kuntoon/static/js/main.a000e447.js",
+    "index.html": "/kaupunki-kuntoon/index.html",
+    "main.9a057028.css.map": "/kaupunki-kuntoon/static/css/main.9a057028.css.map",
+    "main.a000e447.js.map": "/kaupunki-kuntoon/static/js/main.a000e447.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.9a057028.css",
+    "static/js/main.a000e447.js"
+  ]
+}
