@@ -94,7 +94,7 @@ function OperatorAllReports() {
       <Paper
         sx={{
           '&:hover': {
-            backgroundColor: '#eee',
+            backgroundColor: '#00c8ff16',
           },
         }}
         onClick={() => navigate(`/reports/${report.id}`)}
