@@ -2,6 +2,7 @@ import {
   Button,
   Center,
   Container,
+  Divider,
   Group,
   List,
   Loader,
@@ -35,27 +36,17 @@ function Userprofile() {
   const session = useSelector((state) => state.sessions);
   const email = session?.user.email;
 
-  // useEffect(() => {
-  //   const getProfile = async () => {
-  //     const userid = session?.user.id;
-
-  //     const { data, error } = await supabase
-  //       .from('profiles')
-  //       .select()
-  //       .eq('id', userid)
-  //       .single();
-
-  //     if (error) {
-  //       console.log('error fetching profile', error);
-  //     }
-  //     if (data) {
-  //       dispatch(setUser(data));
-  //       setAvatar(data.avatar);
-  //     }
-  //       setIsLoading(false);  
-  //   };
-  //   getProfile();
-  // }, [session, dispatch]);
+  const sendPasswordReset = async () => {
+    const { data, error } = await supabase.auth.resetPasswordForEmail(email);
+    if(error) console.log(error)
+    if(data){
+      showNotification({
+        title: 'Sähköposti lähetetty!',
+        message: `Salasanan vaihtolinkki lähetetty.`,
+        autoClose: 5000,
+      });
+    }
+  }
 
   const AddUsername = () => {
     const handleUsernameSubmit = async () => {
@@ -145,12 +136,15 @@ function Userprofile() {
         ) : (
           <>
             <Center>
-
-            <Avatar variant="beam" size={160} name={username} />
+              <Avatar variant="beam" size={160} name={username} />
             </Center>
-            <Text align='center' >{username}</Text>
-            <Text align='center'>{email}</Text>
-            ----TODO Salasanan vaihtaminen----
+            <Text mt={'xl'} align="center">{username}</Text>
+            <Text mt={'xl'} align="center">{email}</Text>
+            <Divider my={'xl'} />
+            <Group position='center'>
+
+            <Button color={'pink'} onClick={() => sendPasswordReset()}>Lähetä salasanan vaihtolinkki</Button>
+            </Group>
           </>
         )}
       </Paper>
