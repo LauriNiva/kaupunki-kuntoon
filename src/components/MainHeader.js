@@ -68,7 +68,7 @@ function MainHeader() {
         <Menu.Target>
           <UnstyledButton>
             {username ? (
-              <Avatar variant="marble" name={username} />
+              <Avatar variant="beam" name={username} />
             ) : (
               <Loader />
             )}

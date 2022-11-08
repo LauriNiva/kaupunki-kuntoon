@@ -146,7 +146,7 @@ function Userprofile() {
           <>
             <Center>
 
-            <Avatar variant="marble" size={160} name={username} />
+            <Avatar variant="beam" size={160} name={username} />
             </Center>
             <Text align='center' >{username}</Text>
             <Text align='center'>{email}</Text>
