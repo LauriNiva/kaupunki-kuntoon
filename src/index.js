@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import { store } from './store';
 import { Provider } from 'react-redux';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { HashRouter as Router } from 'react-router-dom';
 import { NotificationsProvider } from '@mantine/notifications';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
