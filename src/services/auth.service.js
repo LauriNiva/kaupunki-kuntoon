@@ -17,15 +17,17 @@ export const signInWithEmailAndPassword = async (email, password) => {
 
 export const signUpNewUser = async (email, password) => {
   console.log(password);
-  const { data, error } = await supabase.auth.signUp(
-    {
-      email,
-      password,
-    },
-    {
-      emailRedirectTo: window.location.href.replace('signup', 'userprofile'),
-    }
+  console.log(
+    'window.location.href.replace',
+    window.location.href.replace('signup', 'userprofile')
   );
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      emailRedirectTo: window.location.href.replace('signup', 'userprofile'),
+    },
+  });
   console.log(data);
   console.log(error);
   if (data) return true;
