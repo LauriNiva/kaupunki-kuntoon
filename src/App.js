@@ -56,15 +56,16 @@ function App() {
           .select('*, department_members(department)')
           .eq('id', userid)
           .single();
-        if (error) console.log(error);
+        if (error) console.log('error fetching the user', error);
         if (data) {
           if (data.department_members)
             data.departments = data.department_members.map(
               (dep) => dep.department
             );
           dispatch(setUser(data));
-        } else {
-          navigate('/userprofile');
+          if (!data.username) {
+            navigate('/userprofile');
+          }
         }
       } else {
         dispatch(setUser(null));
@@ -77,7 +78,6 @@ function App() {
   useEffect(() => {
     dispatch(setInitialReports(user));
   }, [user, dispatch]);
-
 
   return (
     <div>

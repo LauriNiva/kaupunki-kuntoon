@@ -62,7 +62,8 @@ function Userprofile() {
 
       const { data, error } = await supabase
         .from('profiles')
-        .insert({ username: usernameInput })
+        .update({ username: usernameInput })
+        .eq('id', user.id)
         .select();
 
       if (error) {
