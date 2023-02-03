@@ -11,8 +11,9 @@ Itselle kokonaan uutta:
 - Redux omassa projektissa
 - Supabase backend
 
+<details>
+  <summary>---Idea---</summary>
 
----Idea---
 
 Käyttäjät voi merkata kartalle tekstin ja kuvan kanssa paikan, jossa jotain korjattavaa tms.
 Esim. kuoppa tiessä, tie useasti auraamatta, huono näkyvyys risteyksessä, puu kaatunut...
@@ -24,9 +25,11 @@ Ilmoituksen tehnyt käyttäjä näkee, kun asia etenee tai kuitataan tehdyksi.
 ---???---
 Muiden käyttäjien ilmoitusten näkeminen?
 Valmiit pohjat? (Esim Tie -> Kuoppa -> Vaarallinen )
+</details>
 
+<details>
+  <summary>---Stack---</summary>
 
-—--Stack—--
 - Frontend
     - React ( Create React App)
     - Redux Toolkit https://redux-toolkit.js.org/
@@ -39,8 +42,10 @@ Valmiit pohjat? (Esim Tie -> Kuoppa -> Vaarallinen )
         - Auth
         - Bucket (kuvat)
         
+ </details>    
 
-—--MVP-—-
+<details>
+  <summary>---MVP---</summary>
 
 - 2 käyttäjäryhmää
     - käyttäjä
@@ -67,4 +72,5 @@ Valmiit pohjat? (Esim Tie -> Kuoppa -> Vaarallinen )
                 - Paikantaa ensin käyttäjän sijainnin mukaan
                     - Jos lupaa paikannuksen ei saada, paikantaa keskustaan
             - Nappia painamalla merkitsee kartan keskipisteen ylös (tähtäin)
+ </details> 
 
