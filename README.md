@@ -1,5 +1,8 @@
 # kaupunki-kuntoon
 
+![kartta_hfr](https://user-images.githubusercontent.com/17712488/216606267-18cea20d-c943-4b3c-8519-90803630afcd.gif)
+
+
 Live: https://lauriniva.github.io/kaupunki-kuntoon/
 
 Harjoitusprojekti
@@ -10,22 +13,6 @@ Itselle kokonaan uutta:
 - Mantine UI-kirjasto
 - Redux omassa projektissa
 - Supabase backend
-
-<details>
-  <summary>---Idea---</summary>
-
-
-Käyttäjät voi merkata kartalle tekstin ja kuvan kanssa paikan, jossa jotain korjattavaa tms.
-Esim. kuoppa tiessä, tie useasti auraamatta, huono näkyvyys risteyksessä, puu kaatunut...
-
-Henkilökunta näkee kaikki ilmoitukset ja voi merkata ilmoitukselle osaston ja/tai vastuuhenkilön.
-
-Ilmoituksen tehnyt käyttäjä näkee, kun asia etenee tai kuitataan tehdyksi.
-
----???---
-Muiden käyttäjien ilmoitusten näkeminen?
-Valmiit pohjat? (Esim Tie -> Kuoppa -> Vaarallinen )
-</details>
 
 <details>
   <summary>---Stack---</summary>
@@ -42,7 +29,24 @@ Valmiit pohjat? (Esim Tie -> Kuoppa -> Vaarallinen )
         - Auth
         - Bucket (kuvat)
         
- </details>    
+ </details> 
+
+<details>
+  <summary>---Idea---</summary>
+
+
+Käyttäjät voi merkata kartalle tekstin ja kuvan kanssa paikan, jossa jotain korjattavaa tms.
+Esim. kuoppa tiessä, tie useasti auraamatta, huono näkyvyys risteyksessä, puu kaatunut...
+
+Henkilökunta näkee kaikki ilmoitukset ja voi merkata ilmoitukselle osaston ja/tai vastuuhenkilön.
+
+Ilmoituksen tehnyt käyttäjä näkee, kun asia etenee tai kuitataan tehdyksi.
+
+---???---
+Muiden käyttäjien ilmoitusten näkeminen?
+Valmiit pohjat? (Esim Tie -> Kuoppa -> Vaarallinen )
+</details>
+   
 
 <details>
   <summary>---MVP---</summary>
