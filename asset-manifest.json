@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/kaupunki-kuntoon/static/css/main.9a057028.css",
-    "main.js": "/kaupunki-kuntoon/static/js/main.bb5c043a.js",
+    "main.js": "/kaupunki-kuntoon/static/js/main.331d77c8.js",
     "index.html": "/kaupunki-kuntoon/index.html",
     "main.9a057028.css.map": "/kaupunki-kuntoon/static/css/main.9a057028.css.map",
-    "main.bb5c043a.js.map": "/kaupunki-kuntoon/static/js/main.bb5c043a.js.map"
+    "main.331d77c8.js.map": "/kaupunki-kuntoon/static/js/main.331d77c8.js.map"
   },
   "entrypoints": [
     "static/css/main.9a057028.css",
-    "static/js/main.bb5c043a.js"
+    "static/js/main.331d77c8.js"
   ]
 }
