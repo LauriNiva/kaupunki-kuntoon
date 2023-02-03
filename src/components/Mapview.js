@@ -5,6 +5,7 @@ import {
   Checkbox,
   CloseButton,
   Container,
+  Divider,
   Group,
   Image,
   Text,
@@ -31,13 +32,15 @@ function Mapview() {
   //     ? publicReports.filter((report) => report.user_id !== user?.id)
   //     : publicReports;
 
-  console.log('reports', reports);
+  //console.log('reports', reports);
   // console.log('publicReports', publicReports)
   // console.log('publicReportsToShow', publicReportsToShow)
 
   const [showOwnReports, setShowOwnReports] = useState(true);
   const [showPublicReports, setShowPublicReports] = useState(true);
   const [showDepartmentReports, setShowDepartmentReports] = useState(true);
+
+  const reportStatusDescriptions = ['Luotu', 'Luettu', 'Työn alla', 'Valmis'];
 
   const ownMarkerColor = '#7950F2'; // violet.6
   const publicMarkerColor = '#D6336C'; // pink.7
@@ -82,6 +85,20 @@ function Mapview() {
   //   }, [map]);
 
   const generateCustomMarker = (myCustomColour) => {
+    let markerWidth = '2rem';
+    let markerZ = '220';
+    let rotation = 'rotate(45deg)';
+
+    if (myCustomColour === ownMarkerColor) {
+      markerWidth = '1.9rem';
+      markerZ = '221';
+      rotation = 'rotate(15deg)';
+    }
+    if (myCustomColour === departmentMarkerColor) {
+      markerWidth = '1.8rem';
+      rotation = 'rotate(75deg)';
+    }
+
     const markerHtmlStyles = `
   background-color: ${myCustomColour};
   width: 2rem;
@@ -91,7 +108,7 @@ function Mapview() {
   top: -1rem;
   position: relative;
   border-radius: 2rem 2rem 0;
-  transform: rotate(45deg);
+  transform: ${rotation};
   border: 1px solid #FFFFFF`;
 
     return L.divIcon({
@@ -127,9 +144,17 @@ function Mapview() {
           )}
         </Card.Section>
         <Group mt="sm" mb="sm">
-          <Badge>{report.status}</Badge>
+          <Badge>{reportStatusDescriptions[report.status - 1]}</Badge>
         </Group>
+        {report.status === 4 && (
+          <>
+            <Text>{report.comment}</Text>
+            <Divider my={'md'}/>
+          </>
+        )}
+
         <Text>{report.description}</Text>
+
         <Link to={`/reports/${report.id}`}>
           <Button mt={'md'} fullWidth>
             Avaa raportti
