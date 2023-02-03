@@ -1,5 +1,7 @@
 # kaupunki-kuntoon
 
+Live: https://lauriniva.github.io/kaupunki-kuntoon/
+
 Harjoitusprojekti
 
 Itselle kokonaan uutta:
