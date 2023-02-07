@@ -47,7 +47,7 @@ function UserManagement() {
       if (error) console.log(error);
 
       if (data) {
-        data.forEach((user) => (user.email = user.user_emails[0].email));
+        data.forEach((user) => (user.email = user.user_emails.email));
         setUsers(data);
       }
     };

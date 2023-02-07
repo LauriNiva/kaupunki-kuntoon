@@ -30,7 +30,7 @@ function DepartmentManagement() {
     if (data) {
       data.forEach((department) =>
         department.users.forEach(
-          (user) => (user.email = user.user_emails[0].email)
+          (user) => (user.email = user.user_emails.email)
         )
       );
       setDepartments(data);
@@ -52,7 +52,7 @@ function DepartmentManagement() {
 
       if (data) {
         data.forEach((user) => {
-          user.email = user.user_emails[0].email;
+          user.email = user.user_emails.email;
           user.departmentIds = [];
           user.departments.forEach((dep) => user.departmentIds.push(dep.id));
         });
