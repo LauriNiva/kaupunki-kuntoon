@@ -5,9 +5,17 @@
 
 Live: https://lauriniva.github.io/kaupunki-kuntoon/
 
-Harjoitusprojekti
+##Harjoitusprojekti
 
-Itselle kokonaan uutta:
+Sivustolla voi tehdä ilmoituksen puutteesta tai ongelmasta, kuten kuopasta tiessä tai kaatuneesta puusta.
+
+Käyttäjillä eri rooleja:
+ - perus käyttäjä voi lisätä raportteja
+ - työntekijä voi merkata oman osastonsa raportteja työn alle tai valmiiksi
+ - operaattori/työnohjaaja voi ohjata raportteja osastoille
+ - manager voi muokata työntekijöiden osastoja
+
+##Itselle kokonaan uutta:
 - kartan näyttäminen ja asioiden merkkaaminen kartalle
   -Leaflet.js
 - Mantine UI-kirjasto
